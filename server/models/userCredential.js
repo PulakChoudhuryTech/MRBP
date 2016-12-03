@@ -48,7 +48,13 @@ module.exports.addUser = function (user, callback) {
 	UserCredential.create(user, callback);
 };
 
-// Add User by id
+// Get User by id
 module.exports.getUserById = function (uid, callback) {
 	UserCredential.findById(uid, callback);
+};
+
+// Get User by id
+module.exports.getUserByUserName = function (userName, callback) {
+	console.log(userName)
+	UserCredential.findOne(userName, callback);
 };
