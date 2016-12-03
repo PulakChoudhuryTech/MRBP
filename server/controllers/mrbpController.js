@@ -11,6 +11,7 @@ module.exports = function(app, route) {
 
 	//Return middleware.
 	return function(req, res, next) {
+
 		next();
 	};
 };
