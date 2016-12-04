@@ -3,6 +3,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var mongoose = require('mongoose');
+var fs = require('fs');
+var _ = require('lodash');
 
 app.use(express.static(__dirname+'/client'));
 app.use(bodyParser.json());
@@ -21,8 +23,21 @@ app.use(function(req, res, next) {
 });
 
 const baseUrl = '/mrbp/api';
-UserCredential = require('./models/userCredential');
 
+// Add Middleware necessary for REST API's
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(methodOverride('X-HTTP-Method-Override'));
+
+// CORS Support
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
+app.models = require('./models/index');
 // Connect to Mongoose
 mongoose.connect('mongodb://pulak.mrbp:mrbpapp2016@ds119618.mlab.com:19618/mrbp_app');
 
@@ -54,43 +69,10 @@ app.get('/', function(req, res) {
 	res.send('MRBP Application');
 });
 
-app.get(baseUrl + '/users', function(req, res) {
-	UserCredential.getUsers(function(err, users) {
-		if (err) {
-			throw err;
-		}
-		res.json(users);
-	});
-});
-
-app.post(baseUrl + '/users/registration', function(req, res) {
-	var userDetails = req.body;
-	UserCredential.addUser(userDetails, function(err, userDetails) {
-		if (err) {
-			throw err;
-		}
-		res.json(userDetails);
-	});
-});
-
-app.get(baseUrl + '/user/:id', function(req, res) {
-	var id = req.params.id;
-	UserCredential.getUserById(id, function(err, user) {
-		if (err) {
-			throw err;
-		}
-		res.json(user);
-	});
-});
-
-app.post(baseUrl + '/user/find', function(req, res) {
-	var userName = req.body;
-	UserCredential.getUserByUserName(userName, function(err, user) {
-		if (err) {
-			throw err;
-		}
-		res.json(user);
-	});
+// Load the routes.
+var routes = require('./routes');
+_.each(routes, function(controller, route) {
+	app.use(route, controller(app, route));
 });
 
 app.listen(3000);

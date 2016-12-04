@@ -28,6 +28,7 @@ var userCredentialSchema = mongoose.Schema({
 	}
 });
 
+//Customize the response
 userCredentialSchema.set('toJSON', {
      transform: function (doc, ret, options) {
          ret.id = ret._id;
@@ -36,6 +37,7 @@ userCredentialSchema.set('toJSON', {
      }
 }); 
 
+//model
 var UserCredential = module.exports = mongoose.model('UserCredential', userCredentialSchema);
 
 // Get Users

@@ -1,3 +1,4 @@
 module.exports = {
-  '/mrbp': require('./controllers/mrbpController')
+  '/userCredential': require('./controllers/userCredential-controller'),
+  '/meetingRoom' : require('./controllers/meetingRoom-controller')
 };
