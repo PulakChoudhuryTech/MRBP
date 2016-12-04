@@ -40,6 +40,28 @@ module.exports = function(app, route) {
 		});
 	});
 
+	app.put(baseUrl + '/user/:id/update', function(req, res) {
+		var userDetails = req.body;
+		var id = req.params.id;
+		app.models.userCredential.updateUser(id, userDetails, function(err, user) {
+			if (err) {
+				throw err;
+			}
+			res.json(user);
+		});
+	});
+
+	app.post(baseUrl + '/user/auth', function(req, res) {
+		var userDetails = req.body;
+		app.models.userCredential.autherticateUser(userDetails, function(err, user) {
+			if (!user) {
+				res.send("Invalid User");
+				return;
+			}
+			res.json(user);
+		});
+	});
+
 	//Return middleware.
 	return function(req, res, next) {
 		next();

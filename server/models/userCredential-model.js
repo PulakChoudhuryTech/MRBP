@@ -34,6 +34,7 @@ userCredentialSchema.set('toJSON', {
          ret.id = ret._id;
          delete ret._id;
          delete ret.__v;
+         delete ret.password;
      }
 }); 
 
@@ -57,6 +58,15 @@ module.exports.getUserById = function (uid, callback) {
 
 // Get User by userName
 module.exports.getUserByUserName = function (userName, callback) {
-	console.log(userName)
 	UserCredential.findOne(userName, callback);
+};
+
+// Get User by userName
+module.exports.updateUser = function (id, userDetails, callback) {
+	UserCredential.update({_id : id}, userDetails, callback);
+};
+
+module.exports.autherticateUser = function (userDetails, callback) {
+	// UserCredential.update({_id : id}, userDetails, callback);
+	UserCredential.findOne({userName : userDetails.userName, password: userDetails.password}, callback);
 };
