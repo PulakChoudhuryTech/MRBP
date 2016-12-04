@@ -12,7 +12,7 @@ angular.module('mrbpApp')
         };
 
 		this.getUserById = function getUserById(userId) {
-			return RestService.all('user/'+ userId).doGET();
+			return RestService.one('user/'+ userId).doGET();
         };
 
         this.createUser = function createUser(userModel) {

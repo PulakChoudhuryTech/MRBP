@@ -15,18 +15,38 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
+    'ngStorage',
     'ngTouch',
     'ui.router',
-    'restangular'
+    'restangular',
+    'login',
+    'home'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
-  });
+  .config(function ($stateProvider, $urlRouterProvider) {
+
+    $stateProvider
+        .state('root', {
+            abstract: true,
+            template: '<div ui-view></div>',
+            resolve : {
+                userProfile: ['$q', '$location', '$localStorage', 'MrbpModelService', function ($q, $location, $localStorage, MrbpModelService) {
+                    var deferred = $q.defer(),
+                        uid = $localStorage.uid;
+
+                    return MrbpModelService.getUserById(uid).then(function(response) {
+                        console.log(response);
+                        $location.path('/home');
+                        deferred.resolve();
+                        return deferred.promise;
+                    }, function(error) {
+                        console.log(error);
+                        $location.path('/login');
+                        deferred.resolve();
+                        return deferred.promise;
+                    });
+                }]
+            }
+        });
+
+    $urlRouterProvider.otherwise('/login');
+});
