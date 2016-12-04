@@ -33,6 +33,12 @@ angular
                     var deferred = $q.defer(),
                         uid = $localStorage.uid;
 
+                    if (!uid) {
+                        $location.path('/login');
+                        deferred.resolve();
+                        return deferred.promise;
+                    }
+
                     return MrbpModelService.getUserById(uid).then(function(response) {
                         console.log(response);
                         $location.path('/home');
