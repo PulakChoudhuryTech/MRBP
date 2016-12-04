@@ -1,10 +1,13 @@
+var mongooseErrorHandler = require('mongoose-error-handler');
+var HttpStatus = require('http-status-codes');
+
 module.exports = function(app, route) {
 	const baseUrl = '/mrbp/api';
 	
 	app.get(baseUrl + '/users', function(req, res) {
 		app.models.userCredential.getUsers(function(err, users) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(users);
 		});
@@ -14,7 +17,7 @@ module.exports = function(app, route) {
 		var userDetails = req.body;
 		app.models.userCredential.addUser(userDetails, function(err, userDetails) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(userDetails);
 		});
@@ -24,7 +27,7 @@ module.exports = function(app, route) {
 		var id = req.params.id;
 		app.models.userCredential.getUserById(id, function(err, user) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(user);
 		});
@@ -34,7 +37,7 @@ module.exports = function(app, route) {
 		var userName = req.body;
 		app.models.userCredential.getUserByUserName(userName, function(err, user) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(user);
 		});
@@ -45,7 +48,7 @@ module.exports = function(app, route) {
 		var id = req.params.id;
 		app.models.userCredential.updateUser(id, userDetails, function(err, user) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(user);
 		});

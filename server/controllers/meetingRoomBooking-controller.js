@@ -1,3 +1,6 @@
+var mongooseErrorHandler = require('mongoose-error-handler');
+var HttpStatus = require('http-status-codes');
+
 module.exports = function(app, route) {
 	const baseUrl = '/mrbp/api';
 	var MeetingRoomBook = app.models.meetingRoomBook;
@@ -7,7 +10,7 @@ module.exports = function(app, route) {
 		var bookingDetails = req.body;
 		MeetingRoomBook.bookMeetingRoom(bookingDetails, function(err, bookingDetails) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(bookingDetails);
 		});
@@ -16,7 +19,7 @@ module.exports = function(app, route) {
 	app.get(baseUrl + '/meetingroom/bookings/list', function(req, res) {
 		MeetingRoomBook.getBookingList(function(err, rooms) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(rooms);
 		});
@@ -26,7 +29,7 @@ module.exports = function(app, route) {
 		var meetingId = req.params.id;
 		MeetingRoomBook.removeMeeting(meetingId, function(err, rooms) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(rooms);
 		});
@@ -37,7 +40,7 @@ module.exports = function(app, route) {
 		var bookingDetails = req.body;
 		MeetingRoomBook.updateMeeting(meetingId, bookingDetails, function(err, rooms) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(rooms);
 		});

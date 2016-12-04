@@ -3,15 +3,15 @@ var mongoose = require('mongoose');
 // Meeting Room Schema
 var meetingRoomBookingSchema = mongoose.Schema({
 	attendies : [{
-				name : String,
-				empId: Number,
+				name : { type: String, required: true },
+				empId: { type: Number, required: true },
 				_id : false
 	}],
-	roomName: String,
-	bookingDate: Number,
-	bookFrom: String,
-	bookTo: String,
-	bookedBy: String
+	roomName: { type: String, required: true },
+	bookingDate: { type: Number, required: true },
+	bookFrom: { type: String, required: true },
+	bookTo: { type: String, required: true },
+	bookedBy: { type: String, required: true }
 });
 
 //Customize the response
@@ -22,6 +22,13 @@ meetingRoomBookingSchema.set('toJSON', {
          delete ret.__v;
      }
 }); 
+
+//validation for attendies attribute in schema
+meetingRoomBookingSchema.path('attendies').validate(function(features){
+    if(!features){return false}
+    else if(features.length === 0){return false}
+    return true;
+}, 'name is inappropriate');
 
 //model
 var MeetingRoomBooking = module.exports = mongoose.model('MeetingRoomBooking', meetingRoomBookingSchema);

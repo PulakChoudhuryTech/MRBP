@@ -1,3 +1,6 @@
+var mongooseErrorHandler = require('mongoose-error-handler');
+var HttpStatus = require('http-status-codes');
+
 module.exports = function(app, route) {
 	const baseUrl = '/mrbp/api';
 	var MeetingRoom = app.models.meetingRoom;
@@ -6,7 +9,7 @@ module.exports = function(app, route) {
 	app.get(baseUrl + '/meetingrooms', function(req, res) {
 		MeetingRoom.getMeetingRooms(function(err, rooms) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(rooms);
 		});
@@ -16,7 +19,7 @@ module.exports = function(app, route) {
 		var roomDetails = req.body;
 		MeetingRoom.addMeetingRoom(roomDetails, function(err, roomDetails) {
 			if (err) {
-				throw err;
+				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(roomDetails);
 		});
