@@ -55,7 +55,7 @@ module.exports.getUserById = function (uid, callback) {
 	UserCredential.findById(uid, callback);
 };
 
-// Get User by id
+// Get User by userName
 module.exports.getUserByUserName = function (userName, callback) {
 	console.log(userName)
 	UserCredential.findOne(userName, callback);

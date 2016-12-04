@@ -22,8 +22,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-const baseUrl = '/mrbp/api';
-
 // Add Middleware necessary for REST API's
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -40,7 +38,6 @@ app.use(function(req, res, next) {
 app.models = require('./models/index');
 // Connect to Mongoose
 mongoose.connect('mongodb://pulak.mrbp:mrbpapp2016@ds119618.mlab.com:19618/mrbp_app');
-
 var db = mongoose.connection;
 
 //ROUTES

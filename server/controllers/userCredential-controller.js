@@ -1,6 +1,6 @@
 module.exports = function(app, route) {
 	const baseUrl = '/mrbp/api';
-
+	
 	app.get(baseUrl + '/users', function(req, res) {
 		app.models.userCredential.getUsers(function(err, users) {
 			if (err) {

@@ -12,7 +12,7 @@ module.exports = function(app, route) {
 		});
 	});
 
-	app.post(baseUrl + '/meetingroom', function(req, res) {
+	app.post(baseUrl + '/meetingroom/create', function(req, res) {
 		var roomDetails = req.body;
 		MeetingRoom.addMeetingRoom(roomDetails, function(err, roomDetails) {
 			if (err) {
