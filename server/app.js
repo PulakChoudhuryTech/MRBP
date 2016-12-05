@@ -42,27 +42,6 @@ var db = mongoose.connection;
 
 //ROUTES
 app.get('/', function(req, res) {
-
-	// var helper = require('sendgrid').mail;
-	// var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
-	// var from_email = new helper.Email('pulak89@sendgrid.com');
-	// var to_email = new helper.Email('pulakdj89@gmail.com');
-	// var subject = 'Subject';
-	// var content = new helper.Content('text/plain', 'test');
-	// var mail = new helper.Mail(from_email, subject, to_email, content);
-
-	// var request = sg.emptyRequest({
-	//   method: 'POST',
-	//   path: '/v3/mail/send',
-	//   body: mail.toJSON(),
-	// });
-
-	// sg.API(request, function(err, response) {
-	//   console.log(response.statusCode);
-	//   console.log(response.body);
-	//   console.log(response.headers);
-	// });
-
 	res.send('MRBP Application');
 });
 

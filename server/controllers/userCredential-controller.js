@@ -19,6 +19,9 @@ module.exports = function(app, route) {
 			if (err) {
 				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
+			if (userDetails && userDetails.notification) {
+				app.models.emailNotification.sendUserRegNotificationEmail(userDetails.name);
+			}
 			res.json(userDetails);
 		});
 	});

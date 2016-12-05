@@ -25,6 +25,10 @@ var userCredentialSchema = mongoose.Schema({
 	contact: {
 		type: Number,
 		required: true
+	},
+	notification: {
+		type: Boolean,
+		required: true
 	}
 });
 
