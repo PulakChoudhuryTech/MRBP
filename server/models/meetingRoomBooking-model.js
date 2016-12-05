@@ -5,13 +5,15 @@ var meetingRoomBookingSchema = mongoose.Schema({
 	attendies : [{
 				name : { type: String, required: true },
 				empId: { type: Number, required: true },
+				email: { type: String, required: true },
 				_id : false
 	}],
 	roomName: { type: String, required: true },
 	bookingDate: { type: Number, required: true },
 	bookFrom: { type: String, required: true },
 	bookTo: { type: String, required: true },
-	bookedBy: { type: String, required: true }
+	bookedBy: { type: String, required: true },
+	notification : { type: Boolean, required: false }
 });
 
 //Customize the response
@@ -48,7 +50,7 @@ module.exports.removeMeeting = function (meetingId, callback) {
 	MeetingRoomBooking.remove({_id: meetingId}, callback);
 };
 
-// Remove Meeting
+// Update Meeting
 module.exports.updateMeeting = function (meetingId, bookingDetails, callback) {
 	MeetingRoomBooking.update({_id: meetingId}, bookingDetails, callback);
 };

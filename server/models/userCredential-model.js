@@ -65,12 +65,12 @@ module.exports.getUserByUserName = function (userName, callback) {
 	UserCredential.findOne(userName, callback);
 };
 
-// Get User by userName
+// Update User
 module.exports.updateUser = function (id, userDetails, callback) {
 	UserCredential.update({_id : id}, userDetails, callback);
 };
 
+//Autherticate User
 module.exports.autherticateUser = function (userDetails, callback) {
-	// UserCredential.update({_id : id}, userDetails, callback);
 	UserCredential.findOne({userName : userDetails.userName, password: userDetails.password}, callback);
 };

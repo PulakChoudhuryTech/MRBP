@@ -12,6 +12,9 @@ module.exports = function(app, route) {
 			if (err) {
 				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
+			if (bookingDetails && bookingDetails.notification) {
+				app.models.emailNotification.sendMeetingConfirmationEmail(bookingDetails);
+			}
 			res.json(bookingDetails);
 		});
 	});
