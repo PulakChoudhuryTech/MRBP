@@ -11,8 +11,8 @@ var meetingRoomBookingSchema = mongoose.Schema({
 	}],
 	roomName: { type: String, required: true },
 	bookingDtm: { type: Number, required: true },
-	bookFrom: { type: String, required: true },
-	bookTo: { type: String, required: true },
+	bookingFromDtm: { type: Number, required: true },
+	bookingToDtm: { type: Number, required: true },
 	bookedBy: { type: String, required: true },
 	notification : { type: Boolean, required: false }
 });
@@ -22,6 +22,8 @@ meetingRoomBookingSchema.set('toJSON', {
      transform: function (doc, ret, options) {
          ret.bookingId = ret._id;
          ret.bookingDate = moment(ret.bookingDtm).format("DD/MM/YYYY");
+         ret.bookToTime = moment(ret.bookingToDtm).format("hh:mm a");
+         ret.bookFromTime = moment(ret.bookingFromDtm).format("hh:mm a")
          delete ret._id;
          delete ret.__v;
      }
@@ -56,3 +58,14 @@ module.exports.removeMeeting = function (meetingId, callback) {
 module.exports.updateMeeting = function (meetingId, bookingDetails, callback) {
 	MeetingRoomBooking.update({_id: meetingId}, bookingDetails, callback);
 };
+
+// Filter Meetings by time
+module.exports.filterMeetingBookingsByTime = function (bookingDetails, callback) {
+	MeetingRoomBooking.find({
+								bookingFromDtm : { 	
+													$gte: bookingDetails.bookingFromDtm,
+													$lte: bookingDetails.bookingToDtm
+												}	
+							}, callback);
+};
+
