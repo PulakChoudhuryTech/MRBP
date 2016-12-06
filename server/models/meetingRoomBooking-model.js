@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var moment = require('moment');
 
 // Meeting Room Schema
 var meetingRoomBookingSchema = mongoose.Schema({
@@ -9,7 +10,7 @@ var meetingRoomBookingSchema = mongoose.Schema({
 				_id : false
 	}],
 	roomName: { type: String, required: true },
-	bookingDate: { type: Number, required: true },
+	bookingDtm: { type: Number, required: true },
 	bookFrom: { type: String, required: true },
 	bookTo: { type: String, required: true },
 	bookedBy: { type: String, required: true },
@@ -20,6 +21,7 @@ var meetingRoomBookingSchema = mongoose.Schema({
 meetingRoomBookingSchema.set('toJSON', {
      transform: function (doc, ret, options) {
          ret.bookingId = ret._id;
+         ret.bookingDate = moment(ret.bookingDtm).format("DD/MM/YYYY");
          delete ret._id;
          delete ret.__v;
      }
@@ -27,8 +29,8 @@ meetingRoomBookingSchema.set('toJSON', {
 
 //validation for attendies attribute in schema
 meetingRoomBookingSchema.path('attendies').validate(function(features){
-    if(!features){return false}
-    else if(features.length === 0){return false}
+    if (!features) { return false }
+    else if (features.length === 0) { return false }
     return true;
 }, 'name is inappropriate');
 

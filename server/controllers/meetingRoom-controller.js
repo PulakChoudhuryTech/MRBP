@@ -6,6 +6,7 @@ module.exports = function(app, route) {
 	var MeetingRoom = app.models.meetingRoom;
 	
 	//ROUTES
+	//GET: get list of meeting rooms
 	app.get(baseUrl + '/meetingrooms', function(req, res) {
 		MeetingRoom.getMeetingRooms(function(err, rooms) {
 			if (err) {
@@ -15,6 +16,7 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//POST: create a new meeting room
 	app.post(baseUrl + '/meetingroom/create', function(req, res) {
 		var roomDetails = req.body;
 		MeetingRoom.addMeetingRoom(roomDetails, function(err, roomDetails) {

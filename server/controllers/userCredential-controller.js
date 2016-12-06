@@ -4,6 +4,7 @@ var HttpStatus = require('http-status-codes');
 module.exports = function(app, route) {
 	const baseUrl = '/mrbp/api';
 	
+	//GET: get list of users
 	app.get(baseUrl + '/users', function(req, res) {
 		app.models.userCredential.getUsers(function(err, users) {
 			if (err) {
@@ -13,6 +14,7 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//POST: submits user registration
 	app.post(baseUrl + '/users/registration', function(req, res) {
 		var userDetails = req.body;
 		app.models.userCredential.addUser(userDetails, function(err, userDetails) {
@@ -26,6 +28,7 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//GET: get specific user details
 	app.get(baseUrl + '/user/:id', function(req, res) {
 		var id = req.params.id;
 		app.models.userCredential.getUserById(id, function(err, user) {
@@ -36,9 +39,10 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//POST: filter user data by given attribute
 	app.post(baseUrl + '/user/find', function(req, res) {
-		var userName = req.body;
-		app.models.userCredential.getUserByUserName(userName, function(err, user) {
+		var attr = req.body;
+		app.models.userCredential.filterUserByAttr(attr, function(err, user) {
 			if (err) {
 				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
@@ -46,6 +50,7 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//PUT: update specific user details
 	app.put(baseUrl + '/user/:id/update', function(req, res) {
 		var userDetails = req.body;
 		var id = req.params.id;
@@ -57,9 +62,10 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//POST: user authentication
 	app.post(baseUrl + '/user/auth', function(req, res) {
 		var userDetails = req.body;
-		app.models.userCredential.autherticateUser(userDetails, function(err, user) {
+		app.models.userCredential.authenticateUser(userDetails, function(err, user) {
 			if (!user) {
 				res.send("Invalid User");
 				return;

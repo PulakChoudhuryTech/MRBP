@@ -6,6 +6,7 @@ module.exports = function(app, route) {
 	var MeetingRoomBook = app.models.meetingRoomBook;
 	
 	//ROUTES
+	//POST: book a meeting room
 	app.post(baseUrl + '/meetingroom/book', function(req, res) {
 		var bookingDetails = req.body;
 		MeetingRoomBook.bookMeetingRoom(bookingDetails, function(err, bookingDetails) {
@@ -19,6 +20,7 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//GET: get all booking list
 	app.get(baseUrl + '/meetingroom/bookings/list', function(req, res) {
 		MeetingRoomBook.getBookingList(function(err, rooms) {
 			if (err) {
@@ -28,6 +30,7 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//DELETE: remove specific meeting
 	app.delete(baseUrl + '/meetingroom/bookings/:id', function(req, res) {
 		var meetingId = req.params.id;
 		MeetingRoomBook.removeMeeting(meetingId, function(err, rooms) {
@@ -38,6 +41,7 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//PUT: update specific meeting
 	app.put(baseUrl + '/meetingroom/bookings/:id/update', function(req, res) {
 		var meetingId = req.params.id;
 		var bookingDetails = req.body;

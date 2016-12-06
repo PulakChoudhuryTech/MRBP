@@ -2,34 +2,13 @@ var mongoose = require('mongoose');
 
 // User Credential Schema
 var userCredentialSchema = mongoose.Schema({
-	userName: {
-		type: String,
-		required: true
-	},
-	password: {
-		type: String,
-		required: true
-	},
-	name : {
-		type: String,
-		required: true
-	},
-	empId:{
-		type: Number,
-		required: true
-	},
-	email : {
-		type: String,
-		required: true
-	},
-	contact: {
-		type: Number,
-		required: true
-	},
-	notification: {
-		type: Boolean,
-		required: true
-	}
+	userName: { type: String, required: true },
+	password: { type: String, required: true },
+	name : { type: String, required: true },
+	empId:{ type: Number, required: true },
+	email : { type: String, required: true },
+	contact: { type: Number, required: true },
+	notification: { type: Boolean, required: true }
 });
 
 //Customize the response
@@ -61,8 +40,8 @@ module.exports.getUserById = function (uid, callback) {
 };
 
 // Get User by userName
-module.exports.getUserByUserName = function (userName, callback) {
-	UserCredential.findOne(userName, callback);
+module.exports.filterUserByAttr = function (attr, callback) {
+	UserCredential.findOne(attr, callback);
 };
 
 // Update User
@@ -70,7 +49,7 @@ module.exports.updateUser = function (id, userDetails, callback) {
 	UserCredential.update({_id : id}, userDetails, callback);
 };
 
-//Autherticate User
-module.exports.autherticateUser = function (userDetails, callback) {
+//Authenticate User
+module.exports.authenticateUser = function (userDetails, callback) {
 	UserCredential.findOne({userName : userDetails.userName, password: userDetails.password}, callback);
 };
