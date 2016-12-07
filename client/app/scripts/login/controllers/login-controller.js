@@ -14,6 +14,7 @@ angular.module('mrbpApp')
 
     var init = function init() {
         vm.isRegisterForm = false;
+        vm.loginModel = {};
     };
 
     vm.onToggleClick = function onToggleClick() {
@@ -27,12 +28,7 @@ angular.module('mrbpApp')
     };
 
     vm.doLogin = function doLogin() {
-        var loginModel = {
-            userName : vm.username,
-            password : vm.password
-        };
-        MrbpModelService.getUserProfile(loginModel).then(function(response) {
-            console.log(response);
+        MrbpModelService.getUserProfile(vm.loginModel).then(function(response) {
             if (response && response.data === 'Invalid User') {
                 return;
             }
