@@ -9,7 +9,7 @@ body {
 
 /* Pen Title */
 .pen-title {
-  padding: 50px 0;
+  padding: 10px 0;
   text-align: center;
   letter-spacing: 2px;
 }
@@ -109,7 +109,7 @@ body {
   min-width: 100%;
   height: auto;
   border-radius: 5px;
-  padding: 60px 0 40px;
+  padding: 30px 0 10px;
   overflow: hidden;
 }
 .container.active .card.alt .toggle {
@@ -162,7 +162,7 @@ body {
   position: relative;
   background: #ffffff;
   border-radius: 5px;
-  padding: 60px 0 40px 0;
+  padding: 30px 0 40px 0;
   box-sizing: border-box;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   -webkit-transition: .3s ease;
@@ -184,8 +184,8 @@ body {
   position: relative;
   z-index: 1;
   border-left: 5px solid #ed2553;
-  margin: 0 0 35px;
-  padding: 10px 0 10px 50px;
+  margin: 0 0 30px;
+  padding: 0 0 0 50px;
   color: #ed2553;
   font-size: 32px;
   font-weight: 600;
@@ -265,12 +265,12 @@ body {
   position: relative;
   display: inline-block;
   background: 0;
-  width: 240px;
+  width: 100%;
   border: 2px solid #e3e3e3;
   padding: 20px 0;
   font-size: 24px;
   font-weight: 600;
-  line-height: 1;
+  line-height: 0.1;
   text-transform: uppercase;
   overflow: hidden;
   -webkit-transition: .3s ease;
@@ -290,7 +290,7 @@ body {
   left: 50%;
   display: block;
   background: #ed2553;
-  width: 30px;
+  width: 31px;
   height: 30px;
   border-radius: 100%;
   margin: -15px 0 0 -15px;
@@ -334,7 +334,7 @@ body {
   right: -70px;
   z-index: 10;
   width: 140px;
-  height: 140px;
+  /*height: 140px;*/
   background: none;
   border-radius: 100%;
   box-shadow: none;
@@ -455,3 +455,6 @@ body {
     font-size: 12px;
     color: #616161;
 }
+/*#register-form {
+
+}*/
