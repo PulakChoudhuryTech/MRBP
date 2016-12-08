@@ -59,6 +59,11 @@ module.exports.updateMeeting = function (meetingId, bookingDetails, callback) {
 	MeetingRoomBooking.update({_id: meetingId}, bookingDetails, callback);
 };
 
+//Get Meeting details by room id
+module.exports.getMeetingListByRoomId = function (roomId, callback) {
+	MeetingRoomBooking.find({roomId: roomId}, callback);
+};
+
 // Filter Meetings by time
 module.exports.filterMeetingBookingsByTime = function (bookingDetails, callback) {
 	MeetingRoomBooking.find({
