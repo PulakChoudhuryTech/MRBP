@@ -9,7 +9,7 @@ var meetingRoomBookingSchema = mongoose.Schema({
 				email: { type: String, required: true },
 				_id : false
 	}],
-	roomName: { type: String, required: true },
+	roomId: { type: String, required: true },
 	bookingDtm: { type: Number, required: true },
 	bookingFromDtm: { type: Number, required: true },
 	bookingToDtm: { type: Number, required: true },
@@ -63,9 +63,14 @@ module.exports.updateMeeting = function (meetingId, bookingDetails, callback) {
 module.exports.filterMeetingBookingsByTime = function (bookingDetails, callback) {
 	MeetingRoomBooking.find({
 								bookingFromDtm : { 	
-													$gte: bookingDetails.bookingFromDtm,
-													$lte: bookingDetails.bookingToDtm
-												}	
+													$lte: bookingDetails.bookingToDtm,
+								},
+								bookingToDtm : {
+													$gte: bookingDetails.bookingFromDtm
+												}
 							}, callback);
 };
+
+
+
 
