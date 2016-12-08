@@ -68,7 +68,7 @@ module.exports = function(app, route) {
 		var userDetails = req.body;
 		app.models.userCredential.authenticateUser(userDetails, function (err, user) {
 			if (!user) {
-				res.send("Invalid User");
+				res.json({success: false, msg: 'Invalid User'});
 				return;
 			}
 			res.json(user);
