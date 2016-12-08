@@ -55,11 +55,17 @@ module.exports = function(app, route) {
 	app.put(baseUrl + '/user/:id/update', function (req, res) {
 		var userDetails = req.body;
 		var id = req.params.id;
-		app.models.userCredential.updateUser(id, userDetails, function (err, user) {
-			if (err) {
-				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
-			}
-			res.json(user);
+		app.models.userCredential.filterUserByAttr({ _id: id, userName : userDetails.userName }, function(err, user) {
+			if (user.length) {
+				app.models.userCredential.updateUser(id, userDetails, function (err, user) {
+					if (err) {
+						res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
+					}
+					res.json(user);
+				});
+				return;
+			} 
+			res.status(HttpStatus.NOT_FOUND).json({success: false, msg: 'Cannot change the userName'});
 		});
 	});
 

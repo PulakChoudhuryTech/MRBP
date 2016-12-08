@@ -23,7 +23,8 @@ meetingRoomBookingSchema.set('toJSON', {
          ret.bookingId = ret._id;
          ret.bookingDate = moment(ret.bookingDtm).format("DD/MM/YYYY");
          ret.bookToTime = moment(ret.bookingToDtm).format("hh:mm a");
-         ret.bookFromTime = moment(ret.bookingFromDtm).format("hh:mm a")
+         ret.bookFromTime = moment(ret.bookingFromDtm).format("hh:mm a");
+         ret.meetingDate = moment(ret.bookingFromDtm).format("MMMM Do");
          delete ret._id;
          delete ret.__v;
      }

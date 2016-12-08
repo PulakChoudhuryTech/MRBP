@@ -41,7 +41,7 @@ module.exports.getUserById = function (uid, callback) {
 
 // Get User by userName
 module.exports.filterUserByAttr = function (attr, callback) {
-	UserCredential.findOne(attr, callback);
+	UserCredential.find(attr, callback);
 };
 
 // Update User
