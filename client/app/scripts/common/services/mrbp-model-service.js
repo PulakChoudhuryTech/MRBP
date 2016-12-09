@@ -3,8 +3,10 @@ angular.module('mrbpApp')
 .service('MrbpModelService', ['$q', 'RestService',
 	function ($q, RestService) {
 
-        this.getUserProfile = function getUserProfile() {
-			return RestService.one('user').doGET();
+        this.getUserProfile = function getUserProfile(loginModel) {
+			return RestService.one('user/auth').doPOST(loginModel, null, {}, {
+				'Content-Type': 'Application/json'
+			});
         };
 
 		this.getUsers = function getUsers() {

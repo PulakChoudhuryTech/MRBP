@@ -1,9 +1,9 @@
 <div class="pen-title">
-	<h1>Meeting Room Booking Portal</h1>
-	<span>Pen
+	<h2>Meeting Room Booking Portal</h2>
+	<!-- <span>Pen
 		<i class='fa fa-code'></i> by
 		<a href='javascript:void(0)'>Nithin</a>
-	</span>
+	</span> -->
 </div>
 <!-- <div class="rerun">
 	<a href="">Rerun Pen</a>
@@ -14,32 +14,31 @@
 		<h1 class="title">Login</h1>
 		<form>
 			<div class="input-container">
-				<input type="text" id="Username" required="required"/>
+				<input type="text" id="Username" ng-model="LoginCtrl.loginModel.userName" required="required"/>
 				<label for="Username">Username</label>
 				<div class="bar"></div>
 			</div>
 			<div class="input-container">
-				<input type="password" id="Password" required="required"/>
+				<input type="password" id="Password" ng-model="LoginCtrl.loginModel.password" required="required"/>
 				<label for="Password">Password</label>
 				<div class="bar"></div>
 			</div>
 			<div class="button-container">
-				<button>
+				<button ng-click="LoginCtrl.doLogin()">
 					<span>Sign In</span>
 				</button>
 			</div>
-			<div class="footer">
+			<!-- <div class="footer">
 				<a href="#">Forgot your password?</a>
-			</div>
+			</div> -->
 		</form>
 	</div>
 	<div class="card alt">
-		<div class="toggle"></div>
+		<div class="toggle" ng-click="LoginCtrl.onToggleClick()"></div>
 		<h1 class="title">Register
-
-			<div class="close"></div>
+			<div class="close" ng-click="LoginCtrl.onCloseClick()"></div>
 		</h1>
-		<form>
+		<form id="register-form" ng-if="LoginCtrl.isRegisterForm">
 			<div class="input-container register">
 				<input type="text" id="Username" required="required"/>
 				<label for="Username">Username</label>
