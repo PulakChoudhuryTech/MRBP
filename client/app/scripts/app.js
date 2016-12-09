@@ -32,20 +32,21 @@ angular
                 userProfile: ['$q', '$location', '$localStorage', 'MrbpModelService', function ($q, $location, $localStorage, MrbpModelService) {
                     var deferred = $q.defer(),
                         uid = $localStorage.uid;
-
+                    
                     if (!uid) {
                         $location.path('/login');
                         deferred.resolve();
                         return deferred.promise;
                     }
+                    // Decrypt uder id 
+                    var bytes  = CryptoJS.AES.decrypt(uid.toString(), 'uid');
+                    uid = bytes.toString(CryptoJS.enc.Utf8);
 
                     return MrbpModelService.getUserById(uid).then(function(response) {
-                        console.log(response);
                         $location.path('/home');
                         deferred.resolve();
                         return deferred.promise;
                     }, function(error) {
-                        console.log(error);
                         $location.path('/login');
                         deferred.resolve();
                         return deferred.promise;

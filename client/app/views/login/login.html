@@ -23,6 +23,9 @@
 				<label for="Password">Password</label>
 				<div class="bar"></div>
 			</div>
+			<div class="loginError" ng-if="!LoginCtrl.isValidUser">
+				<span>Invalid Username or password. Try again.</span>
+			</div>
 			<div class="button-container">
 				<button ng-click="LoginCtrl.doLogin()">
 					<span>Sign In</span>

@@ -15,6 +15,7 @@ angular.module('mrbpApp')
     var init = function init() {
         vm.isRegisterForm = false;
         vm.loginModel = {};
+        vm.isValidUser = true;
     };
 
     vm.onToggleClick = function onToggleClick() {
@@ -28,11 +29,14 @@ angular.module('mrbpApp')
     };
 
     vm.doLogin = function doLogin() {
+        vm.loginModel.password = CryptoJS.AES.encrypt(vm.loginModel.password, vm.loginModel.userName).toString();
         MrbpModelService.getUserProfile(vm.loginModel).then(function(response) {
-            if (response && response.data === 'Invalid User') {
+            if (response && !response.data) {
+                vm.loginModel.password = '';
+                vm.isValidUser = false;
                 return;
             }
-            $localStorage.uid = response.data.id;
+            $localStorage.uid = CryptoJS.AES.encrypt(response.data.id, 'uid').toString();
             $state.go('root.home');
         }, function(error) {
             console.log(error);

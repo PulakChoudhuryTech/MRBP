@@ -14,7 +14,7 @@
     "angular-ui-router": "https://github.com/angular-ui/ui-router.git",
     "restangular": "https://github.com/mgonto/restangular.git",
     "font-awesome": "~4.5.0",
-    "cryptojslib": "^3.1.2"
+    "crypto-js": "^3.1.8"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
