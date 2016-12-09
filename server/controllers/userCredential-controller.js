@@ -1,5 +1,14 @@
 var mongooseErrorHandler = require('mongoose-error-handler');
 var HttpStatus = require('http-status-codes');
+var CryptoJS = require("crypto-js");
+
+var ciphertext = CryptoJS.AES.encrypt('pulak', 'mySecretKey');
+ console.log(ciphertext.toString())
+// Decrypt 
+var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), 'mySecretKey');
+var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+ 
+console.log(plaintext);
 
 module.exports = function(app, route) {
 	const baseUrl = '/mrbp/api';
