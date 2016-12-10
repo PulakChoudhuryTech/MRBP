@@ -9,7 +9,6 @@ body {
 
 /* Pen Title */
 .pen-title {
-  padding: 10px 0;
   text-align: center;
   letter-spacing: 2px;
 }
@@ -111,6 +110,7 @@ body {
   border-radius: 5px;
   padding: 10px 0 10px;
   overflow: hidden;
+  margin-bottom: 50px;
 }
 .container.active .card.alt .toggle {
   position: absolute;
