@@ -62,7 +62,7 @@ module.exports.sendMeetingConfirmationEmail = function(meetingDetails) {
 
 //Email notification to user for meeting confirmation
 function scheduleMeetingAlertEmail(meetingDetails) {
-	var date = new Date(1481372285000);
+	var date = new Date(meetingDetails.bookingFromDtm - (20 * 60000));
 	var j = schedule.scheduleJob(date, function() {
 		var emailbody = {
 							"personalizations": [{
