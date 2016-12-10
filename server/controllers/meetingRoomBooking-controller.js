@@ -12,10 +12,10 @@ module.exports = function(app, route) {
 
 		//Validates if some other meeting already booked by the given time preiod
 		MeetingRoomBook.filterMeetingBookingsByTime(bookingDetails, function (err, seachResult) {
-			if (seachResult.length) {
-				res.status(HttpStatus.CONFLICT).json({success: false, msg: "Selected time period has already been booked for some other meeting"});
-				return;
-			} 
+			// if (seachResult.length) {
+			// 	res.status(HttpStatus.CONFLICT).json({success: false, msg: "Selected time period has already been booked for some other meeting"});
+			// 	return;
+			// } 
 			//Goes for new entry
 			MeetingRoomBook.bookMeetingRoom(bookingDetails, function (err, bookingDetails) {
 				if (err) {

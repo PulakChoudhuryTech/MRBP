@@ -19,6 +19,7 @@
     "mongoose": "^4.7.1",
     "mongoose-error-handler": "^1.0.0",
     "node-restful": "^0.2.5",
+    "node-schedule": "^1.2.0",
     "sendgrid": "^4.7.1",
     "underscore": "^1.8.3"
   }
