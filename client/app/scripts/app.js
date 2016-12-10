@@ -32,13 +32,13 @@ angular
                 userProfile: ['$q', '$location', '$localStorage', 'MrbpModelService', function ($q, $location, $localStorage, MrbpModelService) {
                     var deferred = $q.defer(),
                         uid = $localStorage.uid;
-                    
+
                     if (!uid) {
                         $location.path('/login');
                         deferred.resolve();
                         return deferred.promise;
                     }
-                    // Decrypt uder id 
+                    // Decrypt uder id
                     var bytes  = CryptoJS.AES.decrypt(uid.toString(), 'uid');
                     uid = bytes.toString(CryptoJS.enc.Utf8);
 
@@ -55,5 +55,5 @@ angular
             }
         });
 
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/home');
 });
