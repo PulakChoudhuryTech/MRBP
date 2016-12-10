@@ -25,6 +25,12 @@ angular.module('mrbpApp')
 			return RestService.all('rooms').doGET();
         };
 
+        this.registerUser = function registerUser(registrationModel) {
+			return RestService.one('users/registration').doPOST(registrationModel, null, {}, {
+				'Content-Type': 'Application/json'
+			});
+        };
+
         //TODO: this api not required for now
         this.filterUserByAttr = function filterUserByAttr(userModel) {
 			return RestService.all('user/find').doPOST(userModel, {

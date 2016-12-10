@@ -1,13 +1,6 @@
 <div class="pen-title">
 	<h2>Meeting Room Booking Portal</h2>
-	<!-- <span>Pen
-		<i class='fa fa-code'></i> by
-		<a href='javascript:void(0)'>Nithin</a>
-	</span> -->
 </div>
-<!-- <div class="rerun">
-	<a href="">Rerun Pen</a>
-</div> -->
 <div class="container loginContainer">
 	<div class="card"></div>
 	<div class="card">
@@ -31,9 +24,6 @@
 					<span>Sign In</span>
 				</button>
 			</div>
-			<!-- <div class="footer">
-				<a href="#">Forgot your password?</a>
-			</div> -->
 		</form>
 	</div>
 	<div class="card alt">
@@ -43,37 +33,42 @@
 		</h1>
 		<form id="register-form" ng-if="LoginCtrl.isRegisterForm">
 			<div class="input-container register">
-				<input type="text" id="Username" required="required"/>
+				<input type="text" id="name" ng-model="LoginCtrl.registrationModel.name" required="required"/>
+				<label for="name">Name</label>
+				<div class="bar"></div>
+			</div>
+			<div class="input-container register">
+				<input type="text" id="Username" ng-model="LoginCtrl.registrationModel.userName" required="required"/>
 				<label for="Username">Username</label>
 				<div class="bar"></div>
 			</div>
 			<div class="input-container register">
-				<input type="password" id="Password" required="required"/>
+				<input type="password" id="Password" ng-model="LoginCtrl.registrationModel.password" required="required"/>
 				<label for="Password">Password</label>
 				<div class="bar"></div>
 			</div>
-			<!-- <div class="input-container register">
-				<input type="password" id="Repeat Password" required="required"/>
-				<label for="Repeat Password">Repeat Password</label>
+			<div class="input-container register">
+				<input type="password" id="Password" ng-model="LoginCtrl.registrationModel.confirmPassword" required="required"/>
+				<label for="Password">Confirm Password</label>
 				<div class="bar"></div>
-			</div> -->
+			</div>
             <div class="input-container register">
-				<input type="text" id="employeeId" required="required"/>
+				<input type="text" id="employeeId" ng-model="LoginCtrl.registrationModel.empId" required="required"/>
 				<label for="Repeat Password">Employee ID</label>
 				<div class="bar"></div>
 			</div>
             <div class="input-container register">
-				<input type="text" id="emailId" required="required"/>
+				<input type="text" id="emailId" ng-model="LoginCtrl.registrationModel.email" required="required"/>
 				<label for="Repeat Password">Email</label>
 				<div class="bar"></div>
 			</div>
             <div class="input-container register">
-				<input type="text" id="contact" required="required"/>
+				<input type="text" id="contact" ng-model="LoginCtrl.registrationModel.contact" required="required"/>
 				<label for="Repeat Password">Contact</label>
 				<div class="bar"></div>
 			</div>
 			<div class="button-container">
-				<button>
+				<button ng-click="LoginCtrl.onRegisterUser()">
 					<span>Next</span>
 				</button>
 			</div>

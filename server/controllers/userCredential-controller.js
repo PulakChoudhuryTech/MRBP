@@ -18,6 +18,10 @@ module.exports = function(app, route) {
 	//POST: submits user registration
 	app.post(baseUrl + '/users/registration', function (req, res) {
 		var userDetails = req.body;
+		// Decrypt user password 
+		var bytes  = CryptoJS.AES.decrypt(userDetails.password.toString(), userDetails.userName);
+		userDetails.password = bytes.toString(CryptoJS.enc.Utf8);
+
 		app.models.userCredential.addUser(userDetails, function (err, userDetails) {
 			if (err) {
 				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});

@@ -8,7 +8,7 @@
  * Controller of the login
  */
 angular.module('mrbpApp')
-  .controller('LoginController', ['$state', '$localStorage', 'MrbpModelService', function ($state, $localStorage, MrbpModelService) {
+  .controller('LoginController', ['$state', 'MrbpUtilitis', '$localStorage', 'MrbpModelService', function ($state, MrbpUtilitis, $localStorage, MrbpModelService) {
 
     var vm = this;
 
@@ -29,7 +29,7 @@ angular.module('mrbpApp')
     };
 
     vm.doLogin = function doLogin() {
-        vm.loginModel.password = CryptoJS.AES.encrypt(vm.loginModel.password, vm.loginModel.userName).toString();
+        vm.loginModel.password = MrbpUtilitis.getEncryptedValue(vm.loginModel.password,  vm.loginModel.userName);
         MrbpModelService.getUserProfile(vm.loginModel).then(function(response) {
             if (response && !response.data) {
                 vm.loginModel.password = '';
@@ -43,11 +43,17 @@ angular.module('mrbpApp')
         });
     };
 
-    /*MrbpModelService.getUsers().then(function(response) {
-        console.log(response);
-    }, function(error) {
-        console.log(error);
-    });*/
+    vm.onRegisterUser = function onRegisterUser() {
+        if (vm.registrationModel.password !== vm.registrationModel.confirmPassword) {
+            return;
+        }
+        vm.registrationModel.notification = "false";
+        vm.registrationModel.password = MrbpUtilitis.getEncryptedValue(vm.registrationModel.password,  vm.registrationModel.userName);
+        vm.registrationModel.confirmPassword = vm.registrationModel.password;
+        MrbpModelService.registerUser(vm.registrationModel).then(function(response) {
+            vm.registrationModel = {};
+        }, function(error) {});
+    };
 
     init();
 }]);
