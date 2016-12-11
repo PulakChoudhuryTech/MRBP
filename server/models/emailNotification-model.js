@@ -1,4 +1,5 @@
-var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+var config = require('../config');
+var sg = require('sendgrid')(config.sendgridApiKey);
 var _ = require('underscore');
 var moment = require('moment');
 var schedule = require('node-schedule');
@@ -18,7 +19,7 @@ module.exports.sendUserRegNotificationEmail = function(userName) {
 						"from": {
 							"email": "MRBP <pulak89@sendgrid.com>"
 						},
-						"template_id": "89f330ca-1a1a-42d4-8e4f-ddff3d898257",
+						"template_id": "89f330ca-1a1a-42d4-8e4f-ddff3d898257"
 					};
 	sendEmail(emailbody, function (error, response) {
 		  if (error) {
@@ -50,6 +51,10 @@ module.exports.sendMeetingConfirmationEmail = function(meetingDetails) {
 						},
 						"template_id": "4586e8ac-dec6-4576-baf8-a005f4139224"
 					};
+	//checks for attachments			
+	if (meetingDetails.attachments && meetingDetails.attachments.length) {
+		emailbody.attachments = meetingDetails.attachments;
+	}
 	//API for sendgrid mail 
 	sendEmail(emailbody, function (error, response) {
 		  if (error) {
@@ -60,8 +65,47 @@ module.exports.sendMeetingConfirmationEmail = function(meetingDetails) {
 	});
 };
 
+//meeting cancellation email
+module.exports.sendMeetingCancellationEmail = function(meetingDetails) {
+
+	var attendiesEmails = _.map(meetingDetails.attendies, function(value) {
+		return { "email" : value.email }
+	});
+
+	var emailbody = {
+						"personalizations": [{
+							"to": attendiesEmails,
+							"substitutions" : {
+								"%cancelledByName%" : meetingDetails.cancelledBy,
+								"%meetingFromTime%" : moment(meetingDetails.bookingFromDtm).format("hh:mm a"),
+								"%meetingToTime%" :  moment(meetingDetails.bookingToDtm).format("hh:mm a"),
+								"%meetingDate%" : moment(meetingDetails.bookingDtm).format("DD/MM/YYYY"),
+								"%cancellationReason%" : meetingDetails.cancellationReason
+
+							}
+						}],
+						"from": {
+							"email": "MRBP <pulak89@sendgrid.com>"
+						},
+						"template_id": "8cbfdb24-dd8c-49ca-a3c4-e91cb97dc613"
+					};
+	//checks for attachments			
+	if (meetingDetails.attachments && meetingDetails.attachments.length) {
+		emailbody.attachments = meetingDetails.attachments;
+	}
+
+	//API for sendgrid mail 
+	sendEmail(emailbody, function (error, response) {
+		  if (error) {
+		    console.log('Error response received');
+		  }
+	});
+};
+
 //Email notification to user for meeting confirmation
 function scheduleMeetingAlertEmail(meetingDetails) {
+
+	//schedules alert mail prior to min from meeting
 	var date = new Date(meetingDetails.bookingFromDtm - (20 * 60000));
 	var j = schedule.scheduleJob(date, function() {
 		var emailbody = {

@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var moment = require('moment');
+var _ = require('underscore');
+var appConstant = require('../lib/constant');
 
 // Meeting Room Schema
 var meetingRoomBookingSchema = mongoose.Schema({
@@ -14,7 +16,17 @@ var meetingRoomBookingSchema = mongoose.Schema({
 	bookingFromDtm: { type: Number, required: true },
 	bookingToDtm: { type: Number, required: true },
 	bookedBy: { type: String, required: true },
-	notification : { type: Boolean, required: false }
+	notification : { type: Boolean, required: false },
+	attachments : [{
+          content : { type: String, required: true },
+          type : { type: String, required: true },
+          filename : { type: String, required: true },
+          disposition : { type: String, required: true },
+          _id : false
+        }],
+    status: { type: String },
+    cancelledBy : { type: String },
+    cancellationReason: { type: String }
 });
 
 //Customize the response
@@ -25,6 +37,11 @@ meetingRoomBookingSchema.set('toJSON', {
          ret.bookToTime = moment(ret.bookingToDtm).format("hh:mm a");
          ret.bookFromTime = moment(ret.bookingFromDtm).format("hh:mm a");
          ret.meetingDate = moment(ret.bookingFromDtm).format("MMMM Do");
+         ret.status = getCurrentMeetingStatus(ret);
+         if (ret.status != appConstant.MEETINGS.STATUS.CANCELLED) {
+         	delete ret.cancelledBy;
+         	delete ret.cancellationReason;
+         }
          delete ret._id;
          delete ret.__v;
      }
@@ -77,6 +94,32 @@ module.exports.filterMeetingBookingsByTime = function (bookingDetails, callback)
 							}, callback);
 };
 
+// cancel sheduled meetings
+module.exports.cancelScheduledMeetings = function (meetingDetails, callback) {
+		MeetingRoomBooking.findOneAndUpdate({_id: meetingDetails.bookingId},
+											{ "$set": { 
+													status: appConstant.MEETINGS.STATUS.CANCELLED,
+													cancelledBy : meetingDetails.cancelledBy,
+													attachments : meetingDetails.attachments,
+													cancellationReason: meetingDetails.cancellationReason
+												}
+											}, callback);
+};
 
-
+//returns meeting status
+function getCurrentMeetingStatus(meetingDetails) {
+	var currentTimeStammp = new Date().getTime();
+	var status;
+	if (meetingDetails.status === appConstant.MEETINGS.STATUS.CANCELLED) {
+		return meetingDetails.status;
+	}
+	if ((currentTimeStammp > meetingDetails.bookingFromDtm ) && (currentTimeStammp < meetingDetails.bookingToDtm)) {
+		status = appConstant.MEETINGS.STATUS.IN_PROGRESS;
+	} else if (currentTimeStammp < meetingDetails.bookingFromDtm) {
+		status = appConstant.MEETINGS.STATUS.NOT_STARTED;
+	} else if (currentTimeStammp > meetingDetails.bookingToDtm) {
+		status = appConstant.MEETINGS.STATUS.COMPLETED;
+	}
+	return status;
+}
 

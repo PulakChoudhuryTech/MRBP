@@ -20,8 +20,10 @@ module.exports = function(app, route) {
 		var userDetails = req.body;
 		// Decrypt user password 
 		var bytes  = CryptoJS.AES.decrypt(userDetails.password.toString(), userDetails.userName);
-		userDetails.password = bytes.toString(CryptoJS.enc.Utf8);
-
+		var pass = bytes.toString(CryptoJS.enc.Utf8);
+		if (pass) {
+			userDetails.password = pass;
+		}
 		app.models.userCredential.addUser(userDetails, function (err, userDetails) {
 			if (err) {
 				res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});

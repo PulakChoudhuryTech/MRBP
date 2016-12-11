@@ -4,10 +4,12 @@ var HttpStatus = require('http-status-codes');
 module.exports = function(app, route) {
 	const baseUrl = '/mrbp/api';
 	var MeetingRoomBook = app.models.meetingRoomBook;
+	var EmailNotification = app.models.emailNotification;
 	
 	//ROUTES
 	//POST: book a meeting room
 	app.post(baseUrl + '/meetingroom/book', function(req, res) {
+
 		var bookingDetails = req.body;
 
 		//Validates if some other meeting already booked by the given time preiod
@@ -22,7 +24,7 @@ module.exports = function(app, route) {
 					res.status(HttpStatus.BAD_REQUEST).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 				}
 				if (bookingDetails && bookingDetails.notification) {
-					app.models.emailNotification.sendMeetingConfirmationEmail(bookingDetails);
+					EmailNotification.sendMeetingConfirmationEmail(bookingDetails);
 				}
 				res.json(bookingDetails);
 			});
@@ -70,6 +72,20 @@ module.exports = function(app, route) {
 				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}
 			res.json(rooms);
+		});
+	});
+
+	//POST: Cancel scheduled meetings
+	app.post(baseUrl + '/meetingroom/bookings/cancel', function (req, res) {
+		var meetingDetails = req.body;
+		MeetingRoomBook.cancelScheduledMeetings(meetingDetails, function(err, meetings) {
+			if (err) {
+				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
+			}
+			res.json({success : "OK"});
+			if (meetingDetails && meetingDetails.notification) {
+				EmailNotification.sendMeetingCancellationEmail(meetings);
+			}
 		});
 	});
 

@@ -1,0 +1,10 @@
+module.exports = {
+	MEETINGS : {
+		STATUS : {
+			IN_PROGRESS : 'IN_PROGRESS',
+			NOT_STARTED : 'NOT_STARTED',
+			COMPLETED : 'COMPLETED',
+			CANCELLED: 'CANCELLED'
+		}
+	}
+}
