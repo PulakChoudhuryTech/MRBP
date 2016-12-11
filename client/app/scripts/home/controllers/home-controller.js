@@ -12,14 +12,9 @@ angular.module('mrbpApp')
 
         var vm = this;
         var init = function init() {
-            // $("#accordion").accordion({
-            //     heightStyle: "fill",
-            //     collapsible: true,
-            //     active: false
-            // });
             MrbpModelService.getMeetingBookingsList().then(function (response) {
-                    vm.meetingsList = response.data.plain();
-                    console.log(vm.meetingsList);
+                vm.meetingsList = response.data.plain();
+                console.log(vm.meetingsList);
             }, function (error) {
 
             });
