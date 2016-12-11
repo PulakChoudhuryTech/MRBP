@@ -31,6 +31,9 @@ angular.module('mrbpApp')
 			});
         };
 
+        this.getMeetingBookingsList = function	getMeetingBookingsList() {
+			return RestService.all('meetingroom/bookings/list').doGET();
+        };
         //TODO: this api not required for now
         this.filterUserByAttr = function filterUserByAttr(userModel) {
 			return RestService.all('user/find').doPOST(userModel, {

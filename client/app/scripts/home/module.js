@@ -7,8 +7,8 @@ angular.module('home', [])
     $stateProvider
         .state('root.home', {
             url: '/home',
-            controller: 'homeController',
-            controllerAs: 'homeCtrl',
+            controller: 'HomeController',
+            controllerAs: 'HomeCtrl',
             templateUrl: 'views/home/home.html'
         });
 });
