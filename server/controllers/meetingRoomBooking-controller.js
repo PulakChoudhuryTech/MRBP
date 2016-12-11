@@ -12,8 +12,12 @@ module.exports = function(app, route) {
 
 		var bookingDetails = req.body;
 
+		var filterObj = {
+			bookingFromDtm : bookingDetails.bookingFromDtm,
+			bookingToDtm : bookingDetails.bookingToDtm
+		};
 		//Validates if some other meeting already booked by the given time preiod
-		MeetingRoomBook.filterMeetingBookingsByTime(bookingDetails, function (err, seachResult) {
+		MeetingRoomBook.filterMeetingBookings(filterObj, function (err, seachResult) {
 			if (seachResult.length) {
 				res.status(HttpStatus.CONFLICT).json({success: false, msg: "Selected time period has already been booked for some other meeting"});
 				return;
@@ -89,10 +93,10 @@ module.exports = function(app, route) {
 		});
 	});
 
-	//PUT: update specific meeting
+	//POST: filter by parameters
 	app.post(baseUrl + '/meetingroom/bookings/filter', function (req, res) {
 		var bookingDetails = req.body;
-		MeetingRoomBook.filterMeetingBookingsByTime(bookingDetails, function (err, seachResult) {
+		MeetingRoomBook.filterMeetingBookings(bookingDetails, function (err, seachResult) {
 			if (err) {
 				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
 			}

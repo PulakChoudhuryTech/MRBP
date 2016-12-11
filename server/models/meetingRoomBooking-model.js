@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var moment = require('moment');
 var _ = require('underscore');
 var appConstant = require('../lib/constant');
+var UserCredentialModel = require('./userCredential-model');
 
 // Meeting Room Schema
 var meetingRoomBookingSchema = mongoose.Schema({
@@ -15,7 +16,7 @@ var meetingRoomBookingSchema = mongoose.Schema({
 	bookingDtm: { type: Number, required: true },
 	bookingFromDtm: { type: Number, required: true },
 	bookingToDtm: { type: Number, required: true },
-	bookedBy: { type: String, required: true },
+	bookedBy: { name: { type: String, required: true }, userId : { type: String, required: true } },
 	notification : { type: Boolean, required: false },
 	attachments : [{
           content : { type: String, required: true },
@@ -83,27 +84,28 @@ module.exports.getMeetingListByRoomId = function (roomId, callback) {
 };
 
 // Filter Meetings by time
-module.exports.filterMeetingBookingsByTime = function (bookingDetails, callback) {
-	MeetingRoomBooking.find({
-								bookingFromDtm : { 	
-													$lte: bookingDetails.bookingToDtm,
-								},
-								bookingToDtm : {
-													$gte: bookingDetails.bookingFromDtm
-												}
-							}, callback);
+module.exports.filterMeetingBookings = function (bookingDetails, callback) {
+	var query = {}
+	if (bookingDetails.bookingFromDtm && bookingDetails.bookingFromDtm) {
+		query["bookingFromDtm"] = { $lte: bookingDetails.bookingToDtm };
+		query["bookingToDtm"] = { $gte: bookingDetails.bookingFromDtm };
+	} 
+	if (bookingDetails.userId) {
+		query["bookedBy.userId"] = bookingDetails.userId;
+	}
+	MeetingRoomBooking.find(query, callback);
 };
 
 // cancel sheduled meetings
 module.exports.cancelScheduledMeetings = function (meetingDetails, callback) {
-		MeetingRoomBooking.findOneAndUpdate({_id: meetingDetails.bookingId},
-											{ "$set": { 
-													status: appConstant.MEETINGS.STATUS.CANCELLED,
-													cancelledBy : meetingDetails.cancelledBy,
-													attachments : meetingDetails.attachments,
-													cancellationReason: meetingDetails.cancellationReason
-												}
-											}, callback);
+	MeetingRoomBooking.findOneAndUpdate({_id: meetingDetails.bookingId},
+										{ "$set": { 
+												status: appConstant.MEETINGS.STATUS.CANCELLED,
+												cancelledBy : meetingDetails.cancelledBy,
+												attachments : meetingDetails.attachments,
+												cancellationReason: meetingDetails.cancellationReason
+											}
+										}, callback);
 };
 
 //returns meeting status
@@ -122,4 +124,3 @@ function getCurrentMeetingStatus(meetingDetails) {
 	}
 	return status;
 }
-
