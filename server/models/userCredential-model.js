@@ -49,6 +49,11 @@ module.exports.updateUser = function (id, userDetails, callback) {
 	UserCredential.update({_id : id}, userDetails, callback);
 };
 
+//Remove User
+module.exports.removeUser = function (userId, callback) {
+	UserCredential.remove({_id: userId}, callback);
+};
+
 //Authenticate User
 module.exports.authenticateUser = function (userDetails, callback) {
 	UserCredential.findOne({userName : userDetails.userName, password: userDetails.password}, callback);

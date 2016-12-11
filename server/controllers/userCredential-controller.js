@@ -76,6 +76,17 @@ module.exports = function(app, route) {
 		});
 	});
 
+	//DELETE: remove users
+	app.delete(baseUrl + '/user/:id/remove', function (req, res) {
+		var id = req.params.id;
+		app.models.userCredential.removeUser(id, function (err, user) {
+			if (err) {
+				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
+			}
+			res.json({success : 'OK'});
+		});
+	});
+
 	//POST: user authentication
 	app.post(baseUrl + '/user/auth', function (req, res) {
 		var userDetails = req.body;
