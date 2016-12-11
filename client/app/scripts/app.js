@@ -17,6 +17,7 @@ angular
     'ngSanitize',
     'ngStorage',
     'ngTouch',
+    'ui.bootstrap',
     'ui.router',
     'restangular',
     'login',

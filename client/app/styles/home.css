@@ -71,7 +71,7 @@
 /* Side Navigation */
 
 @media(min-width:768px) {
-    .side-nav {
+    .side-menu {
         position: fixed;
         top: 60px;
         left: 225px;
@@ -139,4 +139,13 @@
 
 .navbar-brand {
     padding: 5px 15px;
+}
+.side-menu {
+    /*overflow:hidden !important;*/
+}
+#accordion-resizer {
+    padding: 10px;
+    /*min-height: 200px;*/
+    /*width: 350px;
+    height: 220px;*/
 }

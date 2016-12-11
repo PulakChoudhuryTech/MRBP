@@ -14,15 +14,31 @@ angular.module('mrbpApp')
         console.log('home controller');
 
         var init = function init() {
-            // $(function(){
-                $('[data-toggle="tooltip"]').tooltip();
-                $(".side-nav .collapse").on("hide.bs.collapse", function() {
-                    $(this).prev().find(".fa").eq(1).removeClass("fa-angle-right").addClass("fa-angle-down");
-                });
+            $('[data-toggle="tooltip"]').tooltip();
+            $(".side-nav .collapse").on("hide.bs.collapse", function() {
+                $(this).prev().find(".fa").eq(1).removeClass("fa-angle-right").addClass("fa-angle-down");
+                // $(this).css({height: 250px, overflow: hidden, overflow-y: scroll});
+            });
+
             $('.side-nav .collapse').on("show.bs.collapse", function() {
                 $(this).prev().find(".fa").eq(1).removeClass("fa-angle-down").addClass("fa-angle-right");
+                // $(this).css({'min-height': '250px', overflow: 'hidden', 'overflow-y': 'scroll'});
             });
-        // })
+
+            $("#accordion").accordion({
+                heightStyle: "fill",
+                collapsible: true,
+                active: false
+            });
+
+            $("#accordion-resizer").resizable({
+                // minHeight: 200,
+                // minWidth: 200,
+                resize: function() {
+                    $( "#accordion1" ).accordion( "refresh" );
+                }
+            });
+
         };
 
         init();

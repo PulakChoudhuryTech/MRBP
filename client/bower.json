@@ -15,7 +15,8 @@
     "restangular": "https://github.com/mgonto/restangular.git",
     "font-awesome": "~4.5.0",
     "crypto-js": "^3.1.8",
-    "rdash-ui": "1.0.*"
+    "rdash-ui": "1.0.*",
+    "angular-bootstrap": "^2.3.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
