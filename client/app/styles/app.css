@@ -1,6 +1,6 @@
 #mrbp-content .filter-section {
 	width: 100%;
-    border-bottom: 2px solid gray;
+    border-bottom: 2px solid lightgray;
     height: 40px;
     margin-bottom: 10px;
 }
@@ -10,8 +10,7 @@
 #mrbp-content .meeting-details-contr {
     height: 100%;
     border: 1px solid #67c944;
-    border-radius: 2px;
-    margin-left: 10px;
+    border-radius: 5px;
     background-color: #67c944;
     color: white;
     box-shadow: 2px 2px 15px #888888;
@@ -19,9 +18,13 @@
 
 #mrbp-content .meeting-attendees-contr {
     height: 100%;
-    border-radius: 2px;
-    margin-left: 10px;
-    overflow-y: auto;
+    border-radius: 5px;
+    /*overflow-y: auto;*/
+}
+
+#mrbp-content .meeting-status-icon { 
+    margin-top: 10px;
+    font-size: 20px;
 }
 
 #mrbp-content .meeting-time-section {
@@ -38,6 +41,7 @@
 
 #mrbp-content .meeting-attendees-contr .attentees-list {
 	height: 25px;
+    /*overflow: hidden; */
 	border-bottom: 1px solid lightgray;
 }
 
@@ -51,6 +55,14 @@
 	color: 	gray;
 }
 
+#mrbp-content .well {
+    padding: 5px !important;
+}
+
 .mrbp-font20 {
     font-size: 20px;
  }
+
+#mrbp-content .edit-meeting-icon {
+    font-size: 20px
+}

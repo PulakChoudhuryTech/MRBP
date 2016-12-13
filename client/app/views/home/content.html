@@ -6,6 +6,18 @@
     <div class="row" id="main">
         <div class="col-sm-9 col-md-9 well meeting-list-cntr" id="content" ng-repeat="list in HomeCtrl.meetingsList">
             <div class="col-sm-3 col-md-3 meeting-details-contr">
+                <span ng-if="list.status==='COMPLETED'">
+                    <i class="fa fa-check-square-o pull-right meeting-status-icon" aria-hidden="true"></i>
+                </span>
+                <span ng-if="list.status==='NOT_STARTED'">
+                    <i class="fa fa-clock-o pull-right meeting-status-icon" aria-hidden="true"></i>
+                </span>
+                <span ng-if="list.status==='IN_PROGRESS'">
+                    <i class="fa fa-hourglass-2 pull-right meeting-status-icon" aria-hidden="true"></i>
+                </span>
+                <span ng-if="list.status==='CANCELLED'">
+                    <i class="fa fa-close pull-right meeting-status-icon" aria-hidden="true"></i>
+                </span>
                 <div class="meeting-time-section">
                     <span class="mrbp-font20">{{list.bookFromTime}}</span><br/>
                     <span>to</span><br/>
@@ -17,12 +29,28 @@
                 </div>
             </div>
             <div class="col-sm-8 col-md-8 meeting-attendees-contr">
+                <div class="col-sm-12 col-md-12 attentees-list">
+                      <div class="col-sm-8 col-md-8">{{list.bookedBy.name}} (Initiator)</div>
+                      <div class="col-sm-4 col-md-4 meeting-info">
+                        <span>Details</span>
+                        <a href="" uib-tooltip-template="'views/home/attendees-details-tool-tip.html'" tooltip-placement="right-bottom">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
                 <div class="col-sm-12 col-md-12 attentees-list" ng-repeat="attendees in list.attendies">
                     <div class="col-sm-8 col-md-8">{{attendees.name}}</div>
                     <div class="col-sm-4 col-md-4 meeting-info">
-                        <span>Details</span><a href="" tooltip-placement="right-bottom" uib-tooltip="TEST" ><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                        <span>Details</span>
+                        <a href="" uib-tooltip-template="'views/home/attendees-details-tool-tip.html'" tooltip-placement="right-bottom">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-1 col-md-1 edit-meeting-icon">
+                <a href=""><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <a href=""><i class="fa fa-trash-o" aria-hidden="true"></i></a>
             </div>
         </div>
     </div>
