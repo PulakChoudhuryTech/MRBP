@@ -4,7 +4,7 @@
         <button class="btn btn-primary pull-right">Book meeting</button>
         <div class="btn-group meeting-status-dropdown pull-right" uib-dropdown auto-close="outsideClick">
             <button id="btn-append-to-single-button" type="button" class="btn btn-secondary btn-dropdown meeting-filter-btn" uib-dropdown-toggle>
-                <span ng-repeat="menu in HomeCtrl.filterMenus">
+                <span class="filter-status-icon" ng-repeat="menu in HomeCtrl.filterMenus">
                     <div role="{{menu.role}}" class="{{menu.className}}"></div>
                 </span>
                 <span class="caret"></span>
@@ -13,7 +13,7 @@
                 <li ng-repeat="menu in HomeCtrl.filterMenus" class="all-filters" role="allFilters">
                     <a class="dropdown-link">
                     <div class="input-checkbox-wrap " role="all" style="display: inline;">
-                        <input type="checkbox" name="all" value="" id="all" checked="checked">
+                        <input type="checkbox" ng-value="" ng-model="HomeCtrl.meetingFilter.status[menu.role]"/>
                         <div role="{{menu.role}}" class="{{menu.className}}"></div>
                         <label class="input-checkbox-label" for="all">{{menu.label}}</label>
                     </div>

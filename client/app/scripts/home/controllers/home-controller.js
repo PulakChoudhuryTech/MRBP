@@ -32,6 +32,12 @@ angular.module('mrbpApp')
 
             });
 
+            vm.meetingFilter = {
+                status : {
+                    "completed_circle" : true
+                }
+            };
+
             vm.filterMenus = [
                 {
                     className : 'metric-circle noFilters',
