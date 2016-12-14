@@ -2,10 +2,33 @@
     <!-- Page Heading -->
     <div class="filter-section">
         <button class="btn btn-primary pull-right">Book meeting</button>
+        <div class="btn-group meeting-status-dropdown pull-right" uib-dropdown auto-close="outsideClick">
+            <button id="btn-append-to-single-button" type="button" class="btn btn-secondary btn-dropdown meeting-filter-btn" uib-dropdown-toggle>
+                <span ng-repeat="menu in HomeCtrl.filterMenus">
+                    <div role="{{menu.role}}" class="{{menu.className}}"></div>
+                </span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-single-button">
+                <li ng-repeat="menu in HomeCtrl.filterMenus" class="all-filters" role="allFilters">
+                    <a class="dropdown-link">
+                    <div class="input-checkbox-wrap " role="all" style="display: inline;">
+                        <input type="checkbox" name="all" value="" id="all" checked="checked">
+                        <div role="{{menu.role}}" class="{{menu.className}}"></div>
+                        <label class="input-checkbox-label" for="all">{{menu.label}}</label>
+                    </div>
+                    </a>
+                </li>
+            </ul>
+          </div>
     </div>
     <div class="row" id="main">
         <div class="col-sm-9 col-md-9 well meeting-list-cntr" id="content" ng-repeat="list in HomeCtrl.meetingsList">
-            <div class="col-sm-3 col-md-3 meeting-details-contr">
+            <div class="col-sm-3 col-md-3 meeting-details-contr" 
+                    ng-class="{'mrbp-meeting-not-started' : list.status==='NOT_STARTED',
+                                'mrbp-meeting-completed' : list.status==='COMPLETED',
+                                'mrbp-meeting-cancelled' : list.status==='CANCELLED',
+                                'mrbp-meeting-inprogress' : list.status==='IN_PROGRESS'}">
                 <span ng-if="list.status==='COMPLETED'">
                     <i class="fa fa-check-square-o pull-right meeting-status-icon" aria-hidden="true"></i>
                 </span>
@@ -19,7 +42,7 @@
                     <i class="fa fa-close pull-right meeting-status-icon" aria-hidden="true"></i>
                 </span>
                 <div class="meeting-time-section">
-                    <span class="mrbp-font20">{{list.bookFromTime}}</span><br/>
+                    <span class="mrbp-font20" style="margin-left: 23px;">{{list.bookFromTime}}</span><br/>
                     <span>to</span><br/>
                     <span class="mrbp-font20">{{list.bookToTime}}</span>
                 </div>
@@ -30,6 +53,9 @@
             </div>
             <div class="col-sm-8 col-md-8 meeting-attendees-contr">
                 <div class="col-sm-12 col-md-12 attentees-list">
+                         <div class="mrbp-meeting-title">
+                            {{list.meetingTitle}}
+                        </div>
                       <div class="col-sm-8 col-md-8">{{list.bookedBy.name}} (Initiator)</div>
                       <div class="col-sm-4 col-md-4 meeting-info">
                         <span>Details</span>

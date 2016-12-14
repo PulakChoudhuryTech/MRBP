@@ -25,6 +25,7 @@ var meetingRoomBookingSchema = mongoose.Schema({
           disposition : { type: String, required: true },
           _id : false
         }],
+    meetingTitle: { type: String, required: true },
     status: { type: String },
     cancelledBy : { type: String },
     cancellationReason: { type: String }

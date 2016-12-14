@@ -9,9 +9,7 @@
 
 #mrbp-content .meeting-details-contr {
     height: 100%;
-    border: 1px solid #67c944;
     border-radius: 5px;
-    background-color: #67c944;
     color: white;
     box-shadow: 2px 2px 15px #888888;
 }
@@ -19,7 +17,7 @@
 #mrbp-content .meeting-attendees-contr {
     height: 100%;
     border-radius: 5px;
-    /*overflow-y: auto;*/
+    color: #4f4e4b;
 }
 
 #mrbp-content .meeting-status-icon { 
@@ -30,7 +28,6 @@
 #mrbp-content .meeting-time-section {
 	border-bottom: 1px solid gray;
     height: 75%;
-    padding: 10px;
     font-weight: bold;
     text-align: center;
 }
@@ -40,8 +37,6 @@
 }
 
 #mrbp-content .meeting-attendees-contr .attentees-list {
-	height: 25px;
-    /*overflow: hidden; */
 	border-bottom: 1px solid lightgray;
 }
 
@@ -65,4 +60,65 @@
 
 #mrbp-content .edit-meeting-icon {
     font-size: 20px
+}
+
+#mrbp-content .mrbp-meeting-completed {
+    border: 1px solid #67c944;
+    background-color: #67c944;
+}
+
+#mrbp-content .mrbp-meeting-cancelled {
+    border: 1px solid #ce2929;
+    background-color: #ce2929;
+}
+
+#mrbp-content .mrbp-meeting-not-started {
+    border: 1px solid #efd10e;
+    background-color: #efd10e;
+}
+
+#mrbp-content .mrbp-meeting-inprogress {
+    border: 1px solid #f78040;
+    background-color: #f78040;
+}
+
+#mrbp-content .mrbp-meeting-title {
+    text-align: center;
+    font-size: 15px;
+    border-bottom: 1px solid lightgray;
+    font-weight: bold;
+}
+
+#mrbp-content .metric-circle {
+    width: 10px;
+    height: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: red;
+    display: inline-block;
+}
+
+#mrbp-content .metric-circle.completed {
+    background-color: #67c944;
+}
+
+#mrbp-content .metric-circle.inprogress {
+    background-color: #f78040;
+}
+#mrbp-content .metric-circle.cancelled {
+    background-color: #ce2929;
+}
+#mrbp-content .metric-circle.notStarted {
+    background-color: #efd10e;
+}
+
+#mrbp-content .metric-circle.noFilters {
+    background-color: gray;
+}
+#mrbp-content .meeting-filter-btn {
+    width: 158px;
+}
+#mrbp-content .meeting-status-dropdown {
+    margin-right: 5px;
 }
