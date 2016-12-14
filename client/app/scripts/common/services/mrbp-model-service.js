@@ -22,7 +22,11 @@ angular.module('mrbpApp')
         };
 
         this.getRooms = function getRooms() {
-			return RestService.all('rooms').doGET();
+			return RestService.all('meetingrooms').doGET();
+        };
+
+        this.getMeetingDetailsByRoomId = function getMeetingDetailsByRoomId(roomId) {
+			return RestService.all('/meetingroom/bookings/room/' + roomId).doGET();
         };
 
         this.registerUser = function registerUser(registrationModel) {

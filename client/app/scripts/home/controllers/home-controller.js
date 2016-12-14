@@ -24,9 +24,12 @@ angular.module('mrbpApp')
 
             MrbpModelService.getMeetingBookingsList().then(function (response) {
                 vm.meetingsList = response.data.plain();
-            }, function(error) {
+            }, function(error) {});
 
-            });
+           MrbpModelService.getRooms().then(function (response) {
+                vm.roomsList = response.data.plain();
+            }, function(error) {});
+
             vm.filterMenus = MrbpAppOptionsService.getFilterMenus();
             vm.meetingFilter = {
                 status : {
@@ -42,6 +45,13 @@ angular.module('mrbpApp')
             vm.userDetails.datauri = userData.datauri;
         };
 
+        vm.onSelectRoom = function onSelectRoom(roomDetails) {
+            MrbpModelService.getMeetingDetailsByRoomId(roomDetails.roomId).then(function(response) {
+                vm.meetingsList = response.data.plain();
+            }, function(error) {
+
+            })
+        }
         vm.doLogout = function doLogout() {
             $localStorage.uid = '';
             $state.go('root.login');

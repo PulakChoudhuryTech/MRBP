@@ -47,7 +47,7 @@ module.exports = function(app, route) {
 
 	//GET: get booking list by RoomId
 	app.get(baseUrl + '/meetingroom/bookings/room/:id', function (req, res) {
-		var roomId = req.param.id;
+		var roomId = req.params.id;
 		MeetingRoomBook.getMeetingListByRoomId(roomId, function(err, bookingDetails) {
 			if (err) {
 				res.status(HttpStatus.NOT_FOUND).json({success: false, msg: mongooseErrorHandler.set(err, req.t)});
