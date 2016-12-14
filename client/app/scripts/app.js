@@ -21,7 +21,10 @@ angular
     'ui.router',
     'restangular',
     'login',
-    'home'
+    'home',
+    'ngTagsInput',
+    'naif.base64'
+
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
 
