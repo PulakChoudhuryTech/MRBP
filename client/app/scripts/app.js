@@ -30,7 +30,7 @@ angular
             abstract: true,
             template: '<div ui-view></div>',
             resolve : {
-                userProfile: ['$q', '$location', '$localStorage', 'MrbpModelService', function ($q, $location, $localStorage, MrbpModelService) {
+                userProfile: ['$q', '$location', '$localStorage', 'MrbpModelService', 'MrbpHelperService', function ($q, $location, $localStorage, MrbpModelService, MrbpHelperService) {
                     var deferred = $q.defer(),
                         uid = $localStorage.uid;
 
@@ -44,10 +44,11 @@ angular
                     uid = bytes.toString(CryptoJS.enc.Utf8);
 
                     return MrbpModelService.getUserById(uid).then(function(response) {
+                        MrbpHelperService.setUserDetails(response.data.plain());
                         $location.path('/home');
                         deferred.resolve();
                         return deferred.promise;
-                    }, function(error) {
+                    }, function() {
                         $location.path('/login');
                         deferred.resolve();
                         return deferred.promise;

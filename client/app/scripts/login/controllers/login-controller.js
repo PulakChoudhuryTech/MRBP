@@ -8,7 +8,7 @@
  * Controller of the login
  */
 angular.module('mrbpApp')
-  .controller('LoginController', ['$state', 'MrbpUtilitis', '$localStorage', 'MrbpModelService', function ($state, MrbpUtilitis, $localStorage, MrbpModelService) {
+  .controller('LoginController', ['$state', 'MrbpUtilitis', '$localStorage', 'MrbpModelService', 'MrbpHelperService', function ($state, MrbpUtilitis, $localStorage, MrbpModelService, MrbpHelperService) {
 
     var vm = this;
 
@@ -37,6 +37,7 @@ angular.module('mrbpApp')
                 return;
             }
             $localStorage.uid = CryptoJS.AES.encrypt(response.data.id, 'uid').toString();
+            MrbpHelperService.setUserDetails(response.data.plain());
             $state.go('root.home');
         }, function(error) {
             console.log(error);

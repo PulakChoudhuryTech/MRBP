@@ -1,7 +1,7 @@
 'use strict';
 angular.module('mrbpApp')
-.service('MrbpModelService', ['$q', 'RestService',
-	function ($q, RestService) {
+.service('MrbpModelService', ['$q', 'RestService', '$http',
+	function ($q, RestService, $http) {
 
         this.getUserProfile = function getUserProfile(loginModel) {
 			return RestService.one('user/auth').doPOST(loginModel, null, {}, {
@@ -34,10 +34,15 @@ angular.module('mrbpApp')
         this.getMeetingBookingsList = function	getMeetingBookingsList() {
 			return RestService.all('meetingroom/bookings/list').doGET();
         };
+
         //TODO: this api not required for now
         this.filterUserByAttr = function filterUserByAttr(userModel) {
 			return RestService.all('user/find').doPOST(userModel, {
 				'Content-Type': 'application/json'
 			});
         };
+
+		this.getOfsEmployeesList = function getOfsEmployeesList() {
+			return $http.get('http://ofmc.objectfrontier.com/sites/all/themes/ofmc/contacts.php');
+		};
 }]);
