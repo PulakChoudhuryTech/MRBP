@@ -42,7 +42,11 @@ angular.module('mrbpApp')
 			});
         };
 
+        this.getMrbpConfiguration = function getMrbpConfiguration() {
+			return RestService.all('/mrbpconfig').doGET();
+		};
+
 		this.getOfsEmployeesList = function getOfsEmployeesList() {
-			return $http.get('http://ofmc.objectfrontier.com/sites/all/themes/ofmc/contacts.php');
+			return RestService.all('/externalresources/employeelist').doGET();
 		};
 }]);
