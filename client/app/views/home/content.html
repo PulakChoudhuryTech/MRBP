@@ -1,7 +1,7 @@
 <div id="mrbp-content" class="container-fluid">
     <!-- Page Heading -->
     <div class="filter-section">
-        <button class="btn btn-primary pull-right">Book meeting</button>
+        <button class="btn btn-primary pull-right" ng-click="HomeCtrl.openBookingRoomModel()">Book meeting</button>
         <div class="btn-group meeting-status-dropdown pull-right" uib-dropdown auto-close="outsideClick">
             <button id="btn-append-to-single-button" type="button" class="btn btn-secondary btn-dropdown meeting-filter-btn" uib-dropdown-toggle>
                 <span class="filter-status-icon" ng-repeat="menu in HomeCtrl.filterMenus">
@@ -25,7 +25,7 @@
     <div class="row" id="main">
         <div ng-if="HomeCtrl.isMeetingLoading" class="loader-image"></div>
         <div class="col-sm-9 col-md-9 well meeting-list-cntr" id="content" ng-repeat="list in HomeCtrl.meetingsList">
-            <div class="col-sm-3 col-md-3 meeting-details-contr" 
+            <div class="col-sm-3 col-md-3 meeting-details-contr"
                     ng-class="{'mrbp-meeting-not-started' : list.status==='NOT_STARTED',
                                 'mrbp-meeting-completed' : list.status==='COMPLETED',
                                 'mrbp-meeting-cancelled' : list.status==='CANCELLED',
