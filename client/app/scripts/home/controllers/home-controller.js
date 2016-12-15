@@ -20,7 +20,7 @@ angular.module('mrbpApp')
 
             //gets user details from helper service
             vm.userDetails = MrbpHelperService.getUserDetails();
-            //constuctUserData(MrbpHelperService.getEmployeeList());
+            constuctUserData(MrbpHelperService.getEmployeeList());
 
             MrbpModelService.getMeetingBookingsList().then(function (response) {
                 vm.meetingsList = response.data.plain();
@@ -58,46 +58,11 @@ angular.module('mrbpApp')
         };
 
         vm.openBookingRoomModel = function openBookingRoomModel() {
-  console.log("working");
-      var modalInstance = $uibModal.open({
+        var modalInstance = $uibModal.open({
          templateUrl: 'views/booking/bookingRoom.html',
-         controller: function($scope) {
-           $scope.mytime = new Date();
-
-            $scope.hstep = 1;
-            $scope.mstep = 5;
-
-            $scope.options = {
-              hstep: [1, 2, 3],
-              mstep: [1, 5, 10, 15, 25, 30]
-            };
-
-            $scope.ismeridian = true;
-            $scope.name = 'bottom';
-            $scope.today = function() {
-              $scope.dt = new Date();
-              $scope.dt2 =$scope.dt;
-            };
-            $scope.today();
-            $scope.open1 = function() {
-              $scope.popup1.opened = true;
-            };
-            $scope.open2 = function() {
-              $scope.popup2.opened = true;
-            };
-            $scope.popup1 = {
-              opened: false
-            };
-            $scope.popup2 = {
-              opened: false
-            };
-            $scope.onLoad=function(e, reader, file, fileList, fileOjects, fileObj) {
-              console.log(fileObj);
-            }
-         }
+         controller: 'BookingController'
        });
-};
+      };
 
-
-        init();
+      init();
 }]);

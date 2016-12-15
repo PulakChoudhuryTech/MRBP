@@ -23,7 +23,8 @@ angular
     'login',
     'home',
     'ngTagsInput',
-    'naif.base64'
+    'naif.base64',
+    'ui.bootstrap.datetimepicker'
 
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
