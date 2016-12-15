@@ -1,0 +1,204 @@
+diff --git a/client/app/index.html b/client/app/index.html
+index a75eefd..298508a 100644
+--- a/client/app/index.html
++++ b/client/app/index.html
+@@ -61,6 +61,7 @@
+     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+     <script src="bower_components/jquery-ui/jquery-ui.js"></script>
+     <script src="bower_components/underscore/underscore.js"></script>
++    <script src="bower_components/checklist-model/checklist-model.js"></script>
+     <!-- endbower -->
+     <script src="bower_components/crypto-js/crypto-js.js"></script>
+     <!-- endbuild -->
+diff --git a/client/app/scripts/app.js b/client/app/scripts/app.js
+index c52b420..986be3c 100644
+--- a/client/app/scripts/app.js
++++ b/client/app/scripts/app.js
+@@ -20,6 +20,7 @@ angular
+     'ui.bootstrap',
+     'ui.router',
+     'restangular',
++    'checklist-model',
+     'login',
+     'home'
+   ])
+diff --git a/client/app/scripts/home/controllers/home-controller.js b/client/app/scripts/home/controllers/home-controller.js
+index 63674dc..d2664c7 100644
+--- a/client/app/scripts/home/controllers/home-controller.js
++++ b/client/app/scripts/home/controllers/home-controller.js
+@@ -31,14 +31,9 @@ angular.module('mrbpApp')
+             }, function(error) {});
+ 
+             vm.filterMenus = MrbpAppOptionsService.getFilterMenus();
+-            vm.meetingFilter = {
+-                status : {
+-                    "completed_circle" : true
+-                }
+-            };
+-
+         };
+ 
++
+         var constuctUserData = function constuctUserData(users) {
+             var userData = _.where(users, {prof_id: String(vm.userDetails.empId)})[0];
+             vm.userDetails.name = userData.name;
+@@ -50,8 +45,63 @@ angular.module('mrbpApp')
+                 vm.meetingsList = response.data.plain();
+             }, function(error) {
+ 
+-            })
+-        }
++            });
++        };
++
++        vm.meetingFilter = {
++            selected: {}
++        };
++
++        vm.onFilterChange = function onFilterChange(isSelected, index) {
++            switch(vm.filterMenus[index].role) {
++                case 'noFilter_circle':
++                    if (isSelected) {
++                        _.each(vm.filterMenus, function(obj) {
++                            obj['selected'][obj.id] = true;
++                        });
++                    } else {
++                        _.each(vm.filterMenus, function(obj) {
++                            obj['selected'][obj.id] = false;
++                        });
++                    }
++                    break;
++                case 'completed_circle':
++                    if (isSelected) {
++                        _.each(vm.filterMenus, function(obj, currIndex) {
++                            if (index === currIndex) { return; }
++                            vm.meetingFilter.selected[obj] = false;
++                        });
++                    }
++                    break;
++                case 'cancelled_circle':
++                    if (isSelected) {
++                        _.each(vm.filterMenus, function(obj, currIndex) {
++                            if (index === currIndex) { return; }
++                            vm.meetingFilter.selected[obj] = false;
++                        });
++                    }
++                    break;
++                case 'inprogress_circle':
++                    if (isSelected) {
++                        _.each(vm.filterMenus, function(obj, currIndex) {
++                            if (index === currIndex) { return; }
++                            vm.meetingFilter.selected[obj] = false;
++                        });
++                    }
++                    break;
++                case 'notStarted_circle':
++                    if (isSelected) {
++                        _.each(vm.filterMenus, function(obj, currIndex) {
++                            if (index === currIndex) { return; }
++                            vm.meetingFilter.selected[obj] = false;
++                        });
++                    }
++                    break;
++
++            }
++
++        };
++
+         vm.doLogout = function doLogout() {
+             $localStorage.uid = '';
+             $state.go('root.login');
+diff --git a/client/app/styles/home.css b/client/app/styles/home.css
+index 9541f89..3053517 100644
+--- a/client/app/styles/home.css
++++ b/client/app/styles/home.css
+@@ -149,3 +149,27 @@
+     /*width: 350px;
+     height: 220px;*/
+ }
++#mrbp-content .dropdown-menu > li > span {
++    display: block;
++    padding: 3px 20px;
++    clear: both;
++    font-weight: normal;
++    line-height: 1.42857143;
++    color: #333;
++    white-space: nowrap;
++}
++
++#mrbp-content .dropdown-menu > li > span:hover {
++    background-color: #f5f5f5;
++}
++
++#mrbp-content .dropdown-menu > li > a {
++    color: #23527c;
++    text-align: center;
++}
++
++#mrbp-content .dropdown-menu > li > a:hover {
++    color: #23527c;
++    text-decoration: underline;
++    text-align: center;
++}
+diff --git a/client/app/views/home/content.html b/client/app/views/home/content.html
+index a89460f..6b6d946 100644
+--- a/client/app/views/home/content.html
++++ b/client/app/views/home/content.html
+@@ -10,21 +10,26 @@
+                 <span class="caret"></span>
+             </button>
+             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-single-button">
+-                <li ng-repeat="menu in HomeCtrl.filterMenus" class="all-filters" role="allFilters">
+-                    <a class="dropdown-link">
+-                    <div class="input-checkbox-wrap " role="all" style="display: inline;">
+-                        <input type="checkbox" ng-value="" ng-model="HomeCtrl.meetingFilter.status[menu.role]"/>
+-                        <div role="{{menu.role}}" class="{{menu.className}}"></div>
+-                        <label class="input-checkbox-label" for="all">{{menu.label}}</label>
+-                    </div>
+-                    </a>
++                <li ng-repeat="menu in HomeCtrl.filterMenus" role="menuitem">
++                    <span>
++                        <label>
++                            <input type="checkbox"
++                                ng-model="menu.selected[menu.id]"
++                                ng-value="menu.id"
++                                ng-change="HomeCtrl.onFilterChange(menu.selected[menu.id], $index)">
++                                {{menu.label}}
++                        </label>
++                    </span>
+                 </li>
++                <li role="menuitem">
++                    <a href>Clear All</a>
++                <li>
+             </ul>
+-          </div>
++        </div>
+     </div>
+     <div class="row" id="main">
+         <div class="col-sm-9 col-md-9 well meeting-list-cntr" id="content" ng-repeat="list in HomeCtrl.meetingsList">
+-            <div class="col-sm-3 col-md-3 meeting-details-contr" 
++            <div class="col-sm-3 col-md-3 meeting-details-contr"
+                     ng-class="{'mrbp-meeting-not-started' : list.status==='NOT_STARTED',
+                                 'mrbp-meeting-completed' : list.status==='COMPLETED',
+                                 'mrbp-meeting-cancelled' : list.status==='CANCELLED',
+@@ -80,4 +85,4 @@
+             </div>
+         </div>
+     </div>
+-</div>
+\ No newline at end of file
++</div>
+diff --git a/client/bower.json b/client/bower.json
+index 41c7e6d..daffdfb 100644
+--- a/client/bower.json
++++ b/client/bower.json
+@@ -19,7 +19,8 @@
+     "angular-bootstrap": "^2.3.1",
+     "jquery-ui": "^1.12.1",
+     "lodash": "^4.17.2",
+-    "underscore": "^1.8.3"
++    "underscore": "^1.8.3",
++    "checklist-model": "^0.10.0"
+   },
+   "devDependencies": {
+     "angular-mocks": "^1.4.0"
