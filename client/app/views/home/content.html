@@ -23,6 +23,7 @@
           </div>
     </div>
     <div class="row" id="main">
+        <div ng-if="HomeCtrl.isMeetingLoading" class="loader-image"></div>
         <div class="col-sm-9 col-md-9 well meeting-list-cntr" id="content" ng-repeat="list in HomeCtrl.meetingsList">
             <div class="col-sm-3 col-md-3 meeting-details-contr" 
                     ng-class="{'mrbp-meeting-not-started' : list.status==='NOT_STARTED',

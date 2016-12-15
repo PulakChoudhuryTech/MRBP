@@ -13,6 +13,7 @@ angular.module('mrbpApp')
         var vm = this;
         var init = function init() {
 
+            vm.isMeetingLoading = false;
             if (!$localStorage.uid) {
                 $state.go('root.login');
                 return;
@@ -46,7 +47,10 @@ angular.module('mrbpApp')
         };
 
         vm.onSelectRoom = function onSelectRoom(roomDetails) {
+            vm.meetingsList = [];
+            vm.isMeetingLoading = true;
             MrbpModelService.getMeetingDetailsByRoomId(roomDetails.roomId).then(function(response) {
+                vm.isMeetingLoading = false;
                 vm.meetingsList = response.data.plain();
             }, function(error) {
 
