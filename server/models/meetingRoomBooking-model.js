@@ -86,7 +86,6 @@ module.exports.updateMeeting = function (meetingId, bookingDetails, callback) {
 
 // Accept Meeting
 module.exports.startMeeting = function (meetingId, callback) {
-	console.log(meetingId)
 	MeetingRoomBooking.findOneAndUpdate({_id: meetingId},
 										{ "$set": { 
 											status: appConstant.MEETINGS.STATUS.IN_PROGRESS
@@ -97,7 +96,14 @@ module.exports.startMeeting = function (meetingId, callback) {
 
 // Stop Meeting
 module.exports.stopMeeting = function (meetingId, callback) {
-	cancelScheduledJob(meetingId);
+
+	//cancels other scheduled jobs
+	var scheduledJob = scheduledMeetings[meetingId];
+	if (scheduledJob && scheduledJob.bookToDtmJob) {
+		cancelScheduledJob(scheduledJob.bookToDtmJob);
+		delete scheduledMeetings[meetingId].bookToDtmJob;
+	}
+
 	MeetingRoomBooking.findOneAndUpdate({_id: meetingId},
 										{ "$set": { 
 											status: appConstant.MEETINGS.STATUS.COMPLETED
@@ -149,18 +155,43 @@ module.exports.scheduleMeeting = function(meetingDetails) {
 };
 
 function scheduleMeetingAction(meetingDetails) {
-	var date = new Date(meetingDetails.bookingToDtm);
-	scheduledMeetings[meetingDetails._id] = schedule.scheduleJob(date, function() {
+	var bookToDate = new Date(meetingDetails.bookingToDtm);
+	var bookFromDate = new Date(meetingDetails.bookingFromDtm + 1 * 60000);
+
+	scheduledMeetings[meetingDetails._id] = {};
+
+	//auto cancells the meeting if not manually stopped after meeting
+	scheduledMeetings[meetingDetails._id].bookToDtmJob = schedule.scheduleJob(bookToDate, function() {
 		meetingDetails.bookingId = meetingDetails._id;
 		MeetingRoomBooking.stopMeeting(meetingDetails, function(err, resp) {});
 	});
+
+	//auto cancells the meeting if not started within buffer time
+	scheduledMeetings[meetingDetails._id].bookFromDtmJob = schedule.scheduleJob(bookFromDate, function() {
+		meetingDetails.bookingId = meetingDetails._id;
+		MeetingRoomBooking.find({_id : meetingDetails.bookingId }, function(err, data) {
+			if (data.status !== appConstant.MEETINGS.STATUS.IN_PROGRESS) {
+				//cancellation details
+				meetingDetails.cancelledBy = "MRBP Auto Cancelled";
+				meetingDetails.attachments = [];
+				meetingDetails.cancellationReason = "Meeting not joined on scheduled time";
+				//cancels the scheduled meeting
+				MeetingRoomBooking.cancelScheduledMeetings(meetingDetails, function(err, resp) {});
+				//cancels other scheduled jobs
+				var scheduledJob = scheduledMeetings[meetingDetails.bookingId];
+				if (scheduledJob && scheduledJob.bookToDtmJob) {
+					cancelScheduledJob(scheduledJob.bookToDtmJob);
+					delete scheduledMeetings[meetingDetails.bookingId].bookToDtmJob;
+				}
+
+			}
+		})
+	});
 }	
 
-function cancelScheduledJob(meetingId) {
-	var scheduledJob = scheduledMeetings[meetingId];
+function cancelScheduledJob(scheduledJob) {
 	if (scheduledJob) {
 		scheduledJob.cancel();
-		delete scheduledMeetings[meetingId];
 	}
 }
 
