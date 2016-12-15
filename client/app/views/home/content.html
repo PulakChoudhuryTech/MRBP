@@ -52,7 +52,7 @@
                     <span class="pull-right"><i class="fa fa-calendar" aria-hidden="true"></i></span>
                 </div>
             </div>
-            <div class="col-sm-8 col-md-8 meeting-attendees-contr">
+            <div class="col-sm-7 col-md-7 meeting-attendees-contr">
                 <div class="col-sm-12 col-md-12 attentees-list">
                          <div class="mrbp-meeting-title">
                             {{list.meetingTitle}}
@@ -75,9 +75,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-1 col-md-1 edit-meeting-icon">
+            <div class="col-sm-2 col-md-2 edit-meeting-icon">
                 <a href="" ng-click="onEditMeeting(list)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                 <a href="" ng-click="onCancelMeeting(list)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                <button class="btn btn-success margin-top5" ng-click="HomeCtrl.onStartMeeting()">Start Meeting</button>
+                <button class="btn btn-danger margin-top5" ng-click="HomeCtrl.onStopMeeting()">Stop Meeting</button>
             </div>
         </div>
     </div>

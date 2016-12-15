@@ -3,6 +3,9 @@ var moment = require('moment');
 var _ = require('underscore');
 var appConstant = require('../lib/constant');
 var UserCredentialModel = require('./userCredential-model');
+var schedule = require('node-schedule');
+
+var scheduledMeetings = {};
 
 // Meeting Room Schema
 var meetingRoomBookingSchema = mongoose.Schema({
@@ -39,7 +42,8 @@ meetingRoomBookingSchema.set('toJSON', {
          ret.bookToTime = moment(ret.bookingToDtm).format("hh:mm a");
          ret.bookFromTime = moment(ret.bookingFromDtm).format("hh:mm a");
          ret.meetingDate = moment(ret.bookingFromDtm).format("MMMM Do");
-         ret.status = getCurrentMeetingStatus(ret);
+         // ret.status = getCurrentMeetingStatus(ret);
+
          if (ret.status != appConstant.MEETINGS.STATUS.CANCELLED) {
          	delete ret.cancelledBy;
          	delete ret.cancellationReason;
@@ -66,6 +70,7 @@ module.exports.getBookingList = function (callback, limit) {
 
 // Add Meeting Room
 module.exports.bookMeetingRoom = function (bookingDetails, callback) {
+	bookingDetails.status = appConstant.MEETINGS.STATUS.NOT_STARTED;
 	MeetingRoomBooking.create(bookingDetails, callback);
 };
 
@@ -77,6 +82,28 @@ module.exports.removeMeeting = function (meetingId, callback) {
 // Update Meeting
 module.exports.updateMeeting = function (meetingId, bookingDetails, callback) {
 	MeetingRoomBooking.update({_id: meetingId}, bookingDetails, callback);
+};
+
+// Accept Meeting
+module.exports.startMeeting = function (meetingId, callback) {
+	console.log(meetingId)
+	MeetingRoomBooking.findOneAndUpdate({_id: meetingId},
+										{ "$set": { 
+											status: appConstant.MEETINGS.STATUS.IN_PROGRESS
+										}
+									}, callback);
+
+};
+
+// Stop Meeting
+module.exports.stopMeeting = function (meetingId, callback) {
+	cancelScheduledJob(meetingId);
+	MeetingRoomBooking.findOneAndUpdate({_id: meetingId},
+										{ "$set": { 
+											status: appConstant.MEETINGS.STATUS.COMPLETED
+										}
+									}, callback);
+
 };
 
 //Get Meeting details by room id
@@ -94,6 +121,13 @@ module.exports.filterMeetingBookings = function (bookingDetails, callback) {
 	if (bookingDetails.userId) {
 		query["bookedBy.userId"] = bookingDetails.userId;
 	}
+	if (bookingDetails.status) {
+		if (bookingDetails.status instanceof Array) {
+			query["status"] = { "$in" : bookingDetails.status };
+		} else {
+			query["status"] = bookingDetails.status;
+		}
+	}
 	MeetingRoomBooking.find(query, callback);
 };
 
@@ -108,6 +142,27 @@ module.exports.cancelScheduledMeetings = function (meetingDetails, callback) {
 											}
 										}, callback);
 };
+
+
+module.exports.scheduleMeeting = function(meetingDetails) {
+	scheduleMeetingAction(meetingDetails)
+};
+
+function scheduleMeetingAction(meetingDetails) {
+	var date = new Date(meetingDetails.bookingToDtm);
+	scheduledMeetings[meetingDetails._id] = schedule.scheduleJob(date, function() {
+		meetingDetails.bookingId = meetingDetails._id;
+		MeetingRoomBooking.stopMeeting(meetingDetails, function(err, resp) {});
+	});
+}	
+
+function cancelScheduledJob(meetingId) {
+	var scheduledJob = scheduledMeetings[meetingId];
+	if (scheduledJob) {
+		scheduledJob.cancel();
+		delete scheduledMeetings[meetingId];
+	}
+}
 
 //returns meeting status
 function getCurrentMeetingStatus(meetingDetails) {

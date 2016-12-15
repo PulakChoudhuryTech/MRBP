@@ -21,7 +21,7 @@ angular.module('mrbpApp')
 
             //gets user details from helper service
             vm.userDetails = MrbpHelperService.getUserDetails();
-            //constuctUserData(MrbpHelperService.getEmployeeList());
+            constuctUserData(MrbpHelperService.getEmployeeList());
 
             MrbpModelService.getMeetingBookingsList().then(function (response) {
                 vm.meetingsList = response.data.plain();
