@@ -2,8 +2,15 @@ var mongoose = require('mongoose');
 
 // Meeting Room Schema
 var MRBPConfigSchema = mongoose.Schema({
-	mrbpConfig : {}	
+	mrbpConfig : {}
 });
+
+//Customize the response
+MRBPConfigSchema.set('toJSON', {
+     transform: function (doc, ret, options) {
+         delete ret._id;
+     }
+}); 
 
 //model
 var MRBPConfig = module.exports = mongoose.model('MRBPConfig', MRBPConfigSchema);

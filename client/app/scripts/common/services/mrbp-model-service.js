@@ -39,6 +39,12 @@ angular.module('mrbpApp')
 			return RestService.all('meetingroom/bookings/list').doGET();
         };
 
+        this.filterMeetingList = function filterMeetingList(meetingFilterModel) {
+        	return RestService.one('meetingroom/bookings/filter').doPOST(meetingFilterModel, null, {}, {
+				'Content-Type': 'Application/json'
+			});
+        };
+
         //TODO: this api not required for now
         this.filterUserByAttr = function filterUserByAttr(userModel) {
 			return RestService.all('user/find').doPOST(userModel, {
@@ -52,5 +58,17 @@ angular.module('mrbpApp')
 
 		this.getOfsEmployeesList = function getOfsEmployeesList() {
 			return RestService.all('/externalresources/employeelist').doGET();
+		};
+
+		this.startMeeting = function startMeeting(meetingId) {
+            return RestService.one("meetingroom/bookings/" + meetingId + "/start").doPUT({}, null, {}, {
+                'Content-Type': 'application/json'
+            });
+		};
+
+		this.stopMeeting = function stopMeeting(meetingId) {
+            return RestService.one("meetingroom/bookings/" + meetingId + "/stop").doPUT({}, null, {}, {
+                'Content-Type': 'application/json'
+            });
 		};
 }]);

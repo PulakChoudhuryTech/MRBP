@@ -4,7 +4,8 @@ angular.module('mrbpApp')
 	function ( $q, MrbpModelService) {
 		var options = {},
 			optionsProperties = {
-                "filterMenus" : "filterMenus"
+                "filterMenus" : "filterMenus",
+                "defaultMeetingFilter" : "defaultMeetingFilter"
             };
 
 		this.loadOptions = function loadOptions() {
@@ -25,5 +26,9 @@ angular.module('mrbpApp')
 
 		this.getFilterMenus = function getFilterMenus() {
 			return this.getOptions(optionsProperties.filterMenus);
+		};
+
+		this.getDefaultMeetingFilters = function getDefaultMeetingFilters() {
+			return this.getOptions(optionsProperties.defaultMeetingFilter);
 		};
 }]);
