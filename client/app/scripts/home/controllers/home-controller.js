@@ -53,7 +53,7 @@ angular.module('mrbpApp')
 
         vm.onStartMeeting = function onStartMeeting(meetingId) {
             MrbpModelService.startMeeting(meetingId).then(function(response) {
-                console.log(response);
+                filterMeetings();
             }, function(error) {
                 console.log(error);
             });
@@ -61,7 +61,7 @@ angular.module('mrbpApp')
 
         vm.onStopMeeting = function onStopMeeting(meetingId) {
             MrbpModelService.stopMeeting(meetingId).then(function(response) {
-                console.log(response);
+                filterMeetings();
             }, function(error) {
                 console.log(error);
             });
