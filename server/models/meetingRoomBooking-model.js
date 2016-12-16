@@ -3,6 +3,9 @@ var moment = require('moment');
 var _ = require('underscore');
 var appConstant = require('../lib/constant');
 var UserCredentialModel = require('./userCredential-model');
+var schedule = require('node-schedule');
+
+var scheduledMeetings = {};
 
 // Meeting Room Schema
 var meetingRoomBookingSchema = mongoose.Schema({
@@ -39,7 +42,8 @@ meetingRoomBookingSchema.set('toJSON', {
          ret.bookToTime = moment(ret.bookingToDtm).format("hh:mm a");
          ret.bookFromTime = moment(ret.bookingFromDtm).format("hh:mm a");
          ret.meetingDate = moment(ret.bookingFromDtm).format("MMMM Do");
-         ret.status = getCurrentMeetingStatus(ret);
+         // ret.status = getCurrentMeetingStatus(ret);
+
          if (ret.status != appConstant.MEETINGS.STATUS.CANCELLED) {
          	delete ret.cancelledBy;
          	delete ret.cancellationReason;
@@ -66,6 +70,7 @@ module.exports.getBookingList = function (callback, limit) {
 
 // Add Meeting Room
 module.exports.bookMeetingRoom = function (bookingDetails, callback) {
+	bookingDetails.status = appConstant.MEETINGS.STATUS.NOT_STARTED;
 	MeetingRoomBooking.create(bookingDetails, callback);
 };
 
@@ -77,6 +82,34 @@ module.exports.removeMeeting = function (meetingId, callback) {
 // Update Meeting
 module.exports.updateMeeting = function (meetingId, bookingDetails, callback) {
 	MeetingRoomBooking.update({_id: meetingId}, bookingDetails, callback);
+};
+
+// Accept Meeting
+module.exports.startMeeting = function (meetingId, callback) {
+	MeetingRoomBooking.findOneAndUpdate({_id: meetingId},
+										{ "$set": { 
+											status: appConstant.MEETINGS.STATUS.IN_PROGRESS
+										}
+									}, callback);
+
+};
+
+// Stop Meeting
+module.exports.stopMeeting = function (meetingId, callback) {
+
+	//cancels other scheduled jobs
+	var scheduledJob = scheduledMeetings[meetingId];
+	if (scheduledJob && scheduledJob.bookToDtmJob) {
+		cancelScheduledJob(scheduledJob.bookToDtmJob);
+		delete scheduledMeetings[meetingId].bookToDtmJob;
+	}
+
+	MeetingRoomBooking.findOneAndUpdate({_id: meetingId},
+										{ "$set": { 
+											status: appConstant.MEETINGS.STATUS.COMPLETED
+										}
+									}, callback);
+
 };
 
 //Get Meeting details by room id
@@ -94,6 +127,13 @@ module.exports.filterMeetingBookings = function (bookingDetails, callback) {
 	if (bookingDetails.userId) {
 		query["bookedBy.userId"] = bookingDetails.userId;
 	}
+	if (bookingDetails.status) {
+		if (bookingDetails.status instanceof Array) {
+			query["status"] = { "$in" : bookingDetails.status };
+		} else {
+			query["status"] = bookingDetails.status;
+		}
+	}
 	MeetingRoomBooking.find(query, callback);
 };
 
@@ -108,6 +148,52 @@ module.exports.cancelScheduledMeetings = function (meetingDetails, callback) {
 											}
 										}, callback);
 };
+
+
+module.exports.scheduleMeeting = function(meetingDetails) {
+	scheduleMeetingAction(meetingDetails)
+};
+
+function scheduleMeetingAction(meetingDetails) {
+	var bookToDate = new Date(meetingDetails.bookingToDtm);
+	var bookFromDate = new Date(meetingDetails.bookingFromDtm + 1 * 60000);
+
+	scheduledMeetings[meetingDetails._id] = {};
+
+	//auto cancells the meeting if not manually stopped after meeting
+	scheduledMeetings[meetingDetails._id].bookToDtmJob = schedule.scheduleJob(bookToDate, function() {
+		meetingDetails.bookingId = meetingDetails._id;
+		MeetingRoomBooking.stopMeeting(meetingDetails, function(err, resp) {});
+	});
+
+	//auto cancells the meeting if not started within buffer time
+	scheduledMeetings[meetingDetails._id].bookFromDtmJob = schedule.scheduleJob(bookFromDate, function() {
+		meetingDetails.bookingId = meetingDetails._id;
+		MeetingRoomBooking.find({_id : meetingDetails.bookingId }, function(err, data) {
+			if (data.status !== appConstant.MEETINGS.STATUS.IN_PROGRESS) {
+				//cancellation details
+				meetingDetails.cancelledBy = "MRBP Auto Cancelled";
+				meetingDetails.attachments = [];
+				meetingDetails.cancellationReason = "Meeting not joined on scheduled time";
+				//cancels the scheduled meeting
+				MeetingRoomBooking.cancelScheduledMeetings(meetingDetails, function(err, resp) {});
+				//cancels other scheduled jobs
+				var scheduledJob = scheduledMeetings[meetingDetails.bookingId];
+				if (scheduledJob && scheduledJob.bookToDtmJob) {
+					cancelScheduledJob(scheduledJob.bookToDtmJob);
+					delete scheduledMeetings[meetingDetails.bookingId].bookToDtmJob;
+				}
+
+			}
+		})
+	});
+}	
+
+function cancelScheduledJob(scheduledJob) {
+	if (scheduledJob) {
+		scheduledJob.cancel();
+	}
+}
 
 //returns meeting status
 function getCurrentMeetingStatus(meetingDetails) {

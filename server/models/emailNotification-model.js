@@ -3,6 +3,7 @@ var sg = require('sendgrid')(config.sendgridApiKey);
 var _ = require('underscore');
 var moment = require('moment');
 var schedule = require('node-schedule');
+var scheduledMeetings = {};
 
 // Email notifications to user after registration
 module.exports.sendUserRegNotificationEmail = function(userName) {
@@ -39,7 +40,7 @@ module.exports.sendMeetingConfirmationEmail = function(meetingDetails) {
 						"personalizations": [{
 							"to": attendiesEmails,
 							"substitutions" : {
-								"%bookedByName%" : meetingDetails.bookedBy,
+								"%bookedByName%" : meetingDetails.bookedBy.name,
 								"%bookFromTime%" : moment(meetingDetails.bookingFromDtm).format("hh:mm a"),
 								"%bookToTime%" :  moment(meetingDetails.bookingToDtm).format("hh:mm a"),
 								"%bookingDate%" : moment(meetingDetails.bookingDtm).format("DD/MM/YYYY")
@@ -68,6 +69,10 @@ module.exports.sendMeetingConfirmationEmail = function(meetingDetails) {
 //meeting cancellation email
 module.exports.sendMeetingCancellationEmail = function(meetingDetails) {
 
+	//cancels the scheduled jobs
+	cancelScheduledJob(meetingDetails);
+
+	//gets array of email objects
 	var attendiesEmails = _.map(meetingDetails.attendies, function(value) {
 		return { "email" : value.email }
 	});
@@ -104,10 +109,9 @@ module.exports.sendMeetingCancellationEmail = function(meetingDetails) {
 
 //Email notification to user for meeting confirmation
 function scheduleMeetingAlertEmail(meetingDetails) {
-
 	//schedules alert mail prior to min from meeting
-	var date = new Date(meetingDetails.bookingFromDtm - (20 * 60000));
-	var j = schedule.scheduleJob(date, function() {
+	var date = new Date(meetingDetails.bookingFromDtm - (15 * 60000));
+	scheduledMeetings[meetingDetails._id] = schedule.scheduleJob(date, function() {
 		var emailbody = {
 							"personalizations": [{
 								"to": [{"email" : "pulakdj89@gmail.com"}],
@@ -127,6 +131,14 @@ function scheduleMeetingAlertEmail(meetingDetails) {
 		});
 	});
 };
+
+function cancelScheduledJob(meetingDetails) {
+	var scheduledJob = scheduledMeetings[meetingDetails.bookingId];
+	if (scheduledJob) {
+		scheduledJob.cancel();
+		delete scheduledMeetings[meetingDetails.bookingId];
+	}
+}
 
 function sendEmail(emailbody, callback) {
 	//API for sendgrid mail 
