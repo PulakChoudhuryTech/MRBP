@@ -39,6 +39,10 @@
 #mrbp-content .meeting-attendees-contr .attentees-list {
 	border-bottom: 1px solid lightgray;
 }
+#mrbp-content .more-attendees {
+    text-align: center;
+    cursor: pointer;
+}
 
 #mrbp-content .meeting-info {
     font-size: 16px;
@@ -60,6 +64,10 @@
  
 .margin-top5 {
      margin-top: 5px;
+}
+
+.margin-right10 {
+    margin-right: 10px;
 }
 
 #mrbp-content .edit-meeting-icon {
@@ -93,7 +101,7 @@
     font-weight: bold;
 }
 
-#mrbp-content .metric-circle {
+#mrbp-content .meeting-status-dropdown .metric-circle {
     width: 10px;
     height: 10px;
     -webkit-border-radius: 5px;
@@ -103,24 +111,24 @@
     display: inline-block;
 }
 
-#mrbp-content .metric-circle.completed {
+#mrbp-content .meeting-status-dropdown .metric-circle.completed {
     background-color: #67c944;
 }
 
-#mrbp-content .metric-circle.inprogress {
+#mrbp-content .meeting-status-dropdown .metric-circle.inprogress {
     background-color: #f78040;
 }
-#mrbp-content .metric-circle.cancelled {
+#mrbp-content .meeting-status-dropdown .metric-circle.cancelled {
     background-color: #ce2929;
 }
-#mrbp-content .metric-circle.notStarted {
+#mrbp-content .meeting-status-dropdown .metric-circle.notStarted {
     background-color: #efd10e;
 }
 
-#mrbp-content .metric-circle.allFilters {
+#mrbp-content .meeting-status-dropdown .metric-circle.allFilters {
     background-color: gray;
 }
-#mrbp-content .meeting-filter-btn {
+#mrbp-content .meeting-status-dropdown .meeting-filter-btn {
     width: 158px;
 }
 #mrbp-content .meeting-status-dropdown {
@@ -128,6 +136,60 @@
 }
 #mrbp-content .filter-status-icon {
     margin-left: 10px;
+}
+
+#mrbp-content .only-me {
+    border: 1px solid #205081;
+    width: 90px;
+    text-align: center;
+    color: white;
+    height: 30px;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 10px;
+    border-radius: 22px;
+}
+#mrbp-content .only-me.selected {
+    background-color: #205081;
+}
+
+#mrbp-content .only-me.unselected {
+    background-color: white;
+     color: #205081;
+}
+
+#mrbp-content .meeting-color-indicator {
+    font-size: 16px;
+    color: gray;
+}
+
+#mrbp-content .meeting-color-indicator li {
+    list-style-type: none;
+    border-left: 5px solid;
+    padding: 3px;
+    padding-left: 10px;
+    margin-top: 3px;
+}
+#mrbp-content .meeting-color-indicator li i {
+    margin-right: 8px; 
+}
+
+#mrbp-content .meeting-color-indicator .metric-circle.completed {
+    border-color: #67c944;
+}
+
+#mrbp-content .meeting-color-indicator .metric-circle.inprogress {
+    border-color: #f78040;
+}
+#mrbp-content .meeting-color-indicator .metric-circle.cancelled {
+    border-color: #ce2929;
+}
+#mrbp-content .meeting-color-indicator .metric-circle.notStarted {
+    border-color: #efd10e;
+}
+
+#mrbp-content .meeting-color-indicator .metric-circle.allFilters {
+    border-color: gray;
 }
 
 .loader-image {
@@ -140,4 +202,9 @@
     background-repeat:no-repeat;
     background-position:center;
     z-index:1;
+}
+
+
+.mrbp-logo {
+    width: 130px;
 }

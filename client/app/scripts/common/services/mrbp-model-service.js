@@ -71,4 +71,14 @@ angular.module('mrbpApp')
                 'Content-Type': 'application/json'
             });
 		};
+
+		this.cancelMeeting = function cancelMeeting(bookingId) {
+			var meetingObj = {
+				"bookingId" : bookingId,
+				"notification" : false
+			};
+			return RestService.one("meetingroom/bookings/cancel").doPOST(meetingObj, null, {}, {
+				'Content-Type': 'Application/json'
+			});;
+		};
 }]);

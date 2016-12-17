@@ -69,36 +69,65 @@ angular.module('mrbpApp')
 
         vm.onFilterByStatus = function onFilterByStatus(role) {
             vm.meetingFilterPayload.status = [];
-            var isAllStatusSelected = false;
             if (role === 'allFilter_circle' && vm.meetingFilter.status.allFilter_circle) {
+                vm.meetingFilterPayload.status = vm.appConstant.MEETINGS.ROLES["allFilter_circle"];
                 selectAllFilter();
-               vm.meetingFilterPayload.status = vm.appConstant.MEETINGS.ROLES["allFilter_circle"];
-            } else {
-                for (var item in vm.meetingFilter.status) {
-                    if (role === 'allFilter_circle') {
-                        //deselects all filter
-                        vm.meetingFilter.status[item] = false;
-                    } else {
-                        vm.meetingFilter.status.allFilter_circle = false;
-                    }
-                    if (vm.meetingFilter.status[item]) {
-                        // isAllStatusSelected = false;
-                        vm.meetingFilterPayload.status.push(vm.appConstant.MEETINGS.ROLES[item])
-                    }
+                filterMeetings();
+                return;
+            } 
+            for (var item in vm.meetingFilter.status) {
+                if (role === 'allFilter_circle') {
+                    //deselects all filter
+                    vm.meetingFilter.status[item] = false;
+                } else {
+                    vm.meetingFilter.status.allFilter_circle = false;
                 }
+                //checks for selected items
+                if (vm.meetingFilter.status[item]) {
+                    vm.meetingFilterPayload.status.push(vm.appConstant.MEETINGS.ROLES[item])
+                }
+            }
+            vm.meetingFilter.status.allFilter_circle = (vm.meetingFilterPayload.status.length === vm.appConstant.MEETINGS.ROLES["allFilter_circle"].length) ? true : false;
+            filterMeetings();
+        };
+
+        vm.onSelectOnlyMe = function() {
+            vm.isOnlyMeSelected = !vm.isOnlyMeSelected;
+            if (vm.isOnlyMeSelected) {
+                vm.meetingFilterPayload.userId = vm.userDetails.id;
+            } else {
+                delete vm.meetingFilterPayload["userId"];
             }
             filterMeetings();
         };
 
-        var selectAllFilter = function selectAllFilter() {
-            for (var item in vm.meetingFilter.status) {
-                vm.meetingFilter.status[item] = true;
-            }
+        vm.onCancelMeeting = function(meeting) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/booking/cancel-meeting-modal.html',
+                controller: function($scope) {
+                    $scope.selectedMeeting = meeting;
+                    $scope.onSubmit = function() {
+                        MrbpModelService.cancelMeeting(meeting.bookingId).then(function(resp) {
+                            modalInstance.close();
+                            filterMeetings();
+                        }, function(err) {});
+                    }
+                    $scope.onCancel = function() {
+                        modalInstance.close();
+                    };
+                }
+            });
         };
 
         //==============================================================================//
         //      PRIVATES
         //==============================================================================//
+        
+        var selectAllFilter = function selectAllFilter() {
+            for (var item in vm.meetingFilter.status) {
+                vm.meetingFilter.status[item] = true;
+            }
+        };
         
         var constuctUserData = function constuctUserData(users) {
             var userData = _.where(users, {prof_id: String(vm.userDetails.empId)})[0];
@@ -117,7 +146,6 @@ angular.module('mrbpApp')
         var init = function init() {
             //meeting filter object
             vm.meetingFilterPayload = {};
-
             //loads application constant
             vm.appConstant = mrbpConst;
             vm.meetingStatus = mrbpConst.MEETINGS.STATUS;
@@ -141,6 +169,10 @@ angular.module('mrbpApp')
 
             vm.filterMenus = MrbpAppOptionsService.getFilterMenus();
             vm.meetingFilter = MrbpAppOptionsService.getDefaultMeetingFilters();
+
+            vm.isOnlyMeSelected = true;
+            vm.meetingFilterPayload.userId = vm.userDetails.id;
+
             vm.onFilterByStatus();
         };
 

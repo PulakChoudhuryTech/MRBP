@@ -12,7 +12,7 @@
             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-single-button">
                 <li ng-repeat="menu in HomeCtrl.filterMenus" class="all-filters" role="allFilters">
                     <a href="javasript:void(0);">
-                        <div class="input-checkbox-wrap " role="all" style="display: inline;">
+                        <div class="input-checkbox-wrap" role="all" style="display: inline;">
                             <input type="checkbox" 
                                     ng-model="HomeCtrl.meetingFilter.status[menu.role]"
                                     ng-change="HomeCtrl.onFilterByStatus(menu.role)"/>
@@ -23,81 +23,99 @@
                 </li>
             </ul>
           </div>
+          <div class="only-me pull-right" ng-class="HomeCtrl.isOnlyMeSelected ? 'selected' : 'unselected'" ng-click="HomeCtrl.onSelectOnlyMe()">Only Me</div>
     </div>
     <div class="row" id="main">
         <div ng-if="HomeCtrl.isMeetingLoading" class="loader-image"></div>
-        <div class="col-sm-9 col-md-9 well meeting-list-cntr" id="content" ng-repeat="list in HomeCtrl.meetingsList">
-            <div class="col-sm-3 col-md-3 meeting-details-contr"
-                    ng-class="{'mrbp-meeting-not-started' : list.status===HomeCtrl.meetingStatus.NOT_STARTED,
-                                'mrbp-meeting-completed' : list.status===HomeCtrl.meetingStatus.COMPLETED,
-                                'mrbp-meeting-cancelled' : list.status===HomeCtrl.meetingStatus.CANCELLED,
-                                'mrbp-meeting-inprogress' : list.status===HomeCtrl.meetingStatus.IN_PROGRESS}">
-                <span ng-if="list.status===HomeCtrl.meetingStatus.COMPLETED">
-                    <i class="fa fa-check-square-o pull-right meeting-status-icon" aria-hidden="true"></i>
-                </span>
-                <span ng-if="list.status===HomeCtrl.meetingStatus.NOT_STARTED">
-                    <i class="fa fa-clock-o pull-right meeting-status-icon" aria-hidden="true"></i>
-                </span>
-                <span ng-if="list.status===HomeCtrl.meetingStatus.IN_PROGRESS">
-                    <i class="fa fa-hourglass-2 pull-right meeting-status-icon" aria-hidden="true"></i>
-                </span>
-                <span ng-if="list.status===HomeCtrl.meetingStatus.CANCELLED">
-                    <i class="fa fa-close pull-right meeting-status-icon" aria-hidden="true"></i>
-                </span>
-                <div class="meeting-time-section">
-                    <span class="mrbp-font20" style="margin-left: 23px;">{{list.bookFromTime}}</span><br/>
-                    <span>to</span><br/>
-                    <span class="mrbp-font20">{{list.bookToTime}}</span>
+        <div class="col-sm-9 col-md-9">
+            <div class="col-sm-12 col-md-12 well meeting-list-cntr" id="content" ng-repeat="list in HomeCtrl.meetingsList">
+                <div class="col-sm-3 col-md-3 meeting-details-contr"
+                        ng-class="{'mrbp-meeting-not-started' : list.status===HomeCtrl.meetingStatus.NOT_STARTED,
+                                    'mrbp-meeting-completed' : list.status===HomeCtrl.meetingStatus.COMPLETED,
+                                    'mrbp-meeting-cancelled' : list.status===HomeCtrl.meetingStatus.CANCELLED,
+                                    'mrbp-meeting-inprogress' : list.status===HomeCtrl.meetingStatus.IN_PROGRESS}">
+                    <span ng-if="list.status===HomeCtrl.meetingStatus.COMPLETED">
+                        <i class="fa fa-check-square-o pull-right meeting-status-icon" aria-hidden="true"></i>
+                    </span>
+                    <span ng-if="list.status===HomeCtrl.meetingStatus.NOT_STARTED">
+                        <i class="fa fa-clock-o pull-right meeting-status-icon" aria-hidden="true"></i>
+                    </span>
+                    <span ng-if="list.status===HomeCtrl.meetingStatus.IN_PROGRESS">
+                        <i class="fa fa-hourglass-2 pull-right meeting-status-icon" aria-hidden="true"></i>
+                    </span>
+                    <span ng-if="list.status===HomeCtrl.meetingStatus.CANCELLED">
+                        <i class="fa fa-close pull-right meeting-status-icon" aria-hidden="true"></i>
+                    </span>
+                    <div class="meeting-time-section">
+                        <span class="mrbp-font20" style="margin-left: 23px;">{{list.bookFromTime}}</span><br/>
+                        <span>to</span><br/>
+                        <span class="mrbp-font20">{{list.bookToTime}}</span>
+                    </div>
+                    <div class="meeting-date-section">
+                        <span>{{list.meetingDate}}</span>
+                        <span class="pull-right"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                    </div>
                 </div>
-                <div class="meeting-date-section">
-                    <span>{{list.meetingDate}}</span>
-                    <span class="pull-right"><i class="fa fa-calendar" aria-hidden="true"></i></span>
-                </div>
-            </div>
-            <div class="col-sm-7 col-md-7 meeting-attendees-contr">
-                <div class="col-sm-12 col-md-12 attentees-list">
-                         <div class="mrbp-meeting-title">
-                            {{list.meetingTitle}}
+                <div class="col-sm-7 col-md-7 meeting-attendees-contr">
+                    <div class="col-sm-12 col-md-12 attentees-list">
+                             <div class="mrbp-meeting-title">
+                                {{list.meetingTitle}}
+                            </div>
+                          <div class="col-sm-8 col-md-8">{{list.bookedBy.name}} (Initiator)</div>
+                          <div class="col-sm-4 col-md-4 meeting-info">
+                            <span>Details</span>
+                            <a href="" uib-tooltip-template="'views/home/attendees-details-tool-tip.html'" tooltip-placement="right-bottom">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            </a>
                         </div>
-                      <div class="col-sm-8 col-md-8">{{list.bookedBy.name}} (Initiator)</div>
-                      <div class="col-sm-4 col-md-4 meeting-info">
-                        <span>Details</span>
-                        <a href="" uib-tooltip-template="'views/home/attendees-details-tool-tip.html'" tooltip-placement="right-bottom">
-                            <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        </a>
+                    </div>
+                    <div class="col-sm-12 col-md-12" ng-repeat="attendees in list.attendies" ng-class="{'attentees-list' : ($index < 3 || attendees.allShown) && !attendees.allShown}">
+                        <div ng-if="($index < 3) || attendees.allShown">
+                            <div class="col-sm-8 col-md-8">{{attendees.name}}</div>
+                            <div class="col-sm-4 col-md-4 meeting-info">
+                                <span>Details</span>
+                                <a href="" uib-tooltip-template="'views/home/attendees-details-tool-tip.html'" tooltip-placement="right-bottom">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div ng-if="$index == 4" class=" more-attendees" ng-click="attendees.allShown=!attendees.allShown">
+                            <i ng-if="!attendees.allShown" class="glyphicon glyphicon-menu-down" aria-hidden="true"></i>
+                            <i ng-if="attendees.allShown" class="glyphicon glyphicon-menu-up" aria-hidden="true"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-12 attentees-list" ng-repeat="attendees in list.attendies">
-                    <div class="col-sm-8 col-md-8">{{attendees.name}}</div>
-                    <div class="col-sm-4 col-md-4 meeting-info">
-                        <span>Details</span>
-                        <a href="" uib-tooltip-template="'views/home/attendees-details-tool-tip.html'" tooltip-placement="right-bottom">
-                            <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        </a>
-                    </div>
+                <div class="col-sm-2 col-md-2 edit-meeting-icon">
+                    <a href="" 
+                        class="pull-right margin-right10"
+                        ng-if="(list.bookedBy.userId===HomeCtrl.userDetails.id) && (list.status===HomeCtrl.meetingStatus.NOT_STARTED)" 
+                        ng-click="HomeCtrl.onCancelMeeting(list)" 
+                        title="Cancel Meeting">
+                        <i class="fa fa-user-times" aria-hidden="true"></i>
+                    </a>
+                    <a href="" 
+                        class="pull-right margin-right10"
+                        ng-if="list.bookedBy.userId===HomeCtrl.userDetails.id && (list.status===HomeCtrl.meetingStatus.NOT_STARTED) || (list.status===HomeCtrl.meetingStatus.IN_PROGRESS)" 
+                        ng-click="HomeCtrl.onEditMeeting(list)" 
+                        title="Edit Meeting">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </a>
+                    <button class="btn btn-success margin-top5" 
+                            ng-if="(list.status===HomeCtrl.meetingStatus.NOT_STARTED) && (list.bookedBy.userId===HomeCtrl.userDetails.id)" 
+                            ng-click="HomeCtrl.onStartMeeting(list.bookingId)">Start Meeting</button>
+                    <button 
+                        class="btn btn-danger margin-top5" 
+                        ng-if="(list.status===HomeCtrl.meetingStatus.IN_PROGRESS) && (list.bookedBy.userId===HomeCtrl.userDetails.id)" 
+                        ng-click="HomeCtrl.onStopMeeting(list.bookingId)">Stop Meeting</button>
                 </div>
             </div>
-            <div class="col-sm-2 col-md-2 edit-meeting-icon">
-                <a href="" 
-                    ng-if="list.bookedBy.userId===HomeCtrl.userDetails.userId" 
-                    ng-click="onEditMeeting(list)" 
-                    title="Edit Meeting">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                </a>
-                <a href="" 
-                    ng-if="(list.bookedBy.userId===HomeCtrl.userDetails.userId)" 
-                    ng-click="onCancelMeeting(list)" 
-                    title="Cancel Meeting">
-                    <i class="fa fa-user-times" aria-hidden="true"></i>
-                </a>
-                <button class="btn btn-success margin-top5" 
-                        ng-if="list.status===HomeCtrl.meetingStatus.NOT_STARTED" 
-                        ng-click="HomeCtrl.onStartMeeting(list.bookingId)">Start Meeting</button>
-                <button 
-                    class="btn btn-danger margin-top5" 
-                    ng-if="list.status===HomeCtrl.meetingStatus.IN_PROGRESS" 
-                    ng-click="HomeCtrl.onStopMeeting(list.bookingId)">Stop Meeting</button>
-            </div>
+        </div>
+        <div class="col-sm-3 col-md-3">
+            <ul class="meeting-color-indicator">
+                <li ng-repeat="menu in HomeCtrl.filterMenus" ng-if="menu.role!=='allFilter_circle'" class="{{menu.className}}">
+                    <i class="{{menu.icon}}" aria-hidden="true"></i>{{menu.label}}
+                </li>
+            </ul>
         </div>
     </div>
 </div>

@@ -11,12 +11,9 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <!-- <a class="navbar-brand" href="http://cijulenlinea.ucr.ac.cr/dev-users/">
-                <img src="http://placehold.it/200x50&text=LOGO" alt="LOGO">
-            </a> -->
-            <div class="">
-                <h3>MRBP</h3>
-            </div>
+            <a class="navbar-brand" href="http://cijulenlinea.ucr.ac.cr/dev-users/">
+                <img class="mrbp-logo" src="images/mrbp-logo.png" alt="LOGO">
+            </a>
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
@@ -40,7 +37,7 @@
                 <ul class="nav navbar-nav side-nav">
                     <li>
                         <a href="#" data-toggle="collapse" data-target="#submenu-1"><i class="fa fa-fw fa-search"></i> MEETING ROOMS <i class="fa fa-fw fa-angle-down pull-right"></i></a>
-                        <ul id="submenu-1" class="collapse">
+                        <ul id="submenu-1" class="collapse meetingRoomList">
                             <li ng-repeat="room in HomeCtrl.roomsList"><a href="#" ng-click="HomeCtrl.onSelectRoom(room)"><i class="fa fa-angle-double-right"></i> {{room.roomName}} </a></li>
                         </ul>
                     </li>
