@@ -23,9 +23,10 @@
                 </li>
             </ul>
           </div>
-          <div class="only-me pull-right" ng-class="HomeCtrl.isOnlyMeSelected ? 'selected' : 'unselected'" ng-click="HomeCtrl.onSelectOnlyMe()">Only Me</div>
+          <div class="only-me pull-right" ng-class="HomeCtrl.isOnlyMeSelected ? 'selected' : 'unselected'" ng-click="HomeCtrl.onSelectOnlyMe()">Only My Meetings</div>
     </div>
     <div class="row" id="main">
+        <div class="meeting-not-found" ng-if="!HomeCtrl.meetingsList.length">Sorry no meetings found!</div>
         <div ng-if="HomeCtrl.isMeetingLoading" class="loader-image"></div>
         <div class="col-sm-9 col-md-9">
             <div class="col-sm-12 col-md-12 well meeting-list-cntr" id="content" ng-repeat="list in HomeCtrl.meetingsList">
@@ -110,7 +111,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-3 col-md-3">
+        <div class="col-sm-3 col-md-3" ng-if="HomeCtrl.meetingsList.length">
             <ul class="meeting-color-indicator">
                 <li ng-repeat="menu in HomeCtrl.filterMenus" ng-if="menu.role!=='allFilter_circle'" class="{{menu.className}}">
                     <i class="{{menu.icon}}" aria-hidden="true"></i>{{menu.label}}

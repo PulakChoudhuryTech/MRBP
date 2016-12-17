@@ -129,7 +129,7 @@
     background-color: gray;
 }
 #mrbp-content .meeting-status-dropdown .meeting-filter-btn {
-    width: 158px;
+    width: 164px;
 }
 #mrbp-content .meeting-status-dropdown {
     margin-right: 5px;
@@ -140,12 +140,11 @@
 
 #mrbp-content .only-me {
     border: 1px solid #205081;
-    width: 90px;
     text-align: center;
     color: white;
     height: 30px;
     cursor: pointer;
-    padding: 5px;
+    padding: 6px;
     margin-right: 10px;
     border-radius: 22px;
 }
@@ -207,4 +206,11 @@
 
 .mrbp-logo {
     width: 130px;
+}
+
+#mrbp-content .meeting-not-found {
+    text-align: center;
+    font-size: 23px;
+    margin-top: 25px;
+    color: green;
 }
